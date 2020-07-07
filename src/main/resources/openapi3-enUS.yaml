@@ -1,0 +1,2315 @@
+openapi: 3.0.0
+info:
+  title: "opendatapolicing"
+  version: 3.0.0
+servers:
+  - url: https://opendatapolicing-dev.example.com:10581
+paths:
+
+  /callback:
+    get:
+      operationId: callback
+      x-vertx-event-bus: opendatapolicing-enUS-callback
+      description: >+
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+
+  /logout:
+    get:
+      operationId: logout
+      x-vertx-event-bus: opendatapolicing-enUS-logout
+      description: >+
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+
+  /photo:
+    post:
+      operationId: photo
+      x-vertx-event-bus: opendatapolicing-enUS-photo
+      description: >+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                pk:
+                  type: string
+                classeNomCanonique:
+                  type: string
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+
+  /api/user:
+    get:
+      operationId: searchSiteUser
+      x-vertx-event-bus: opendatapolicing-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/SearchSiteUserResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+    patch:
+      operationId: patchSiteUser
+      x-vertx-event-bus: opendatapolicing-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHSiteUserRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/PATCHSiteUserResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+    post:
+      operationId: postSiteUser
+      x-vertx-event-bus: opendatapolicing-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTSiteUserRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/POSTSiteUserResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+  /user:
+    get:
+      operationId: searchpageSiteUser
+      x-vertx-event-bus: opendatapolicing-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/SearchPageSiteUserResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+  /user/{id}:
+    get:
+      operationId: searchpageSiteUserId
+      x-vertx-event-bus: opendatapolicing-enUS-SiteUser
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - User
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/SearchPageSiteUserResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+  /api/cluster:
+    post:
+      operationId: postCluster
+      x-vertx-event-bus: opendatapolicing-enUS-Cluster
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Cluster
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTClusterRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/POSTClusterResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+    put:
+      operationId: putCluster
+      x-vertx-event-bus: opendatapolicing-enUS-Cluster
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Cluster
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTClusterRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/PUTClusterResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+    patch:
+      operationId: patchCluster
+      x-vertx-event-bus: opendatapolicing-enUS-Cluster
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Cluster
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHClusterRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/PATCHClusterResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+    get:
+      operationId: searchCluster
+      x-vertx-event-bus: opendatapolicing-enUS-Cluster
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Cluster
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: ''
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: ''
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: start
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: ''
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: var
+          description: ''
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/SearchClusterResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+  /api/cluster/{id}:
+    get:
+      operationId: getCluster
+      x-vertx-event-bus: opendatapolicing-enUS-Cluster
+      security:
+        - openIdConnect:
+          - DefaultAuthScope
+      description: >+
+      summary: >+
+      tags:
+        - Cluster
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/requestBodies/GETClusterResponse'
+        '400':
+          description: >+
+                <table><table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>invalidRequest</td><td>Missing
+                or invalid Parameters</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '401':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>error</td><td>unAuthorized</td><td>Authorization
+                credentials are missing or invalid</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '403':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>accessNotConfigured</td><td>The
+                request operation is not configured to access this
+                resource</td><td>Channel/Country/Business provided in the request is
+                not supported currently</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '404':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td><td>More
+                Info</td></tr><tr><td>error</td><td>resourceNotFound</td><td>The
+                requested resource was not found</td><td>Empty resource/resource not
+                found</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+        '500':
+          description: >+
+                <table><tr><td>Type</td><td>Code</td><td>Details</td></tr><tr><td>fatal</td><td>serverUnavailable</td><td>The
+                request failed due to an internal error/server
+                unavailability</td></tr></table>
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/requestBodies/ErrorResponse'
+components:
+  securitySchemes:
+    openIdConnect:
+      type: openIdConnect
+      openIdConnectUrl: https://sso.computate.org/auth/realms/COMPUTATE.ORG/.well-known/openid-configuration
+  requestBodies:
+    ErrorResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    SearchSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchSiteUserResponse'
+    PATCHSiteUserRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHSiteUserRequest'
+    PATCHSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHSiteUserResponse'
+    POSTSiteUserRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTSiteUserRequest'
+    POSTSiteUserResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTSiteUserResponse'
+    SearchPageSiteUserResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageSiteUserResponse'
+    POSTClusterRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTClusterRequest'
+    POSTClusterResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTClusterResponse'
+    PUTClusterRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTClusterRequest'
+    PUTClusterResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTClusterResponse'
+    PATCHClusterRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHClusterRequest'
+    PATCHClusterResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHClusterResponse'
+    SearchClusterResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchClusterResponse'
+    GETClusterResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/GETClusterResponse'
+  schemas:
+    SearchSiteUserResponse:
+      allOf:
+        - $ref: "#/components/schemas/SearchClusterResponse"
+        - type: array
+          items:
+            type: object
+            properties:
+              userKeys:
+                type: array
+                items:
+                  type: string
+              userId:
+                type: string
+              userKey:
+                type: string
+              userName:
+                type: string
+              userEmail:
+                type: string
+              userFirstName:
+                type: string
+              userLastName:
+                type: string
+              userFullName:
+                type: string
+              userSite:
+                type: string
+              customerProfileId:
+                type: string
+              userReceiveEmails:
+                type: boolean
+              seeArchived:
+                type: boolean
+              seeDeleted:
+                type: boolean
+    PATCHSiteUserRequest:
+      allOf:
+        - $ref: "#/components/schemas/PATCHClusterRequest"
+        - type: object
+          properties:
+            setUserKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeUserKeys:
+              type: string
+            removeAllUserKeys:
+              type: array
+              items:
+                type: string
+            addUserKeys:
+              type: string
+            addAllUserKeys:
+              type: array
+              items:
+                type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserKey:
+              type: string
+              nullable: true
+            removeUserKey:
+              type: string
+            removeAllUserKey:
+              type: string
+            setUserName:
+              type: string
+              nullable: true
+            removeUserName:
+              type: string
+            removeAllUserName:
+              type: string
+            setUserEmail:
+              type: string
+              nullable: true
+            removeUserEmail:
+              type: string
+            removeAllUserEmail:
+              type: string
+            setUserFirstName:
+              type: string
+              nullable: true
+            removeUserFirstName:
+              type: string
+            removeAllUserFirstName:
+              type: string
+            setUserLastName:
+              type: string
+              nullable: true
+            removeUserLastName:
+              type: string
+            removeAllUserLastName:
+              type: string
+            setUserFullName:
+              type: string
+              nullable: true
+            removeUserFullName:
+              type: string
+            removeAllUserFullName:
+              type: string
+            setUserSite:
+              type: string
+              nullable: true
+            removeUserSite:
+              type: string
+            removeAllUserSite:
+              type: string
+            setCustomerProfileId:
+              type: string
+              nullable: true
+            removeCustomerProfileId:
+              type: string
+            removeAllCustomerProfileId:
+              type: string
+            setUserReceiveEmails:
+              type: boolean
+              nullable: true
+            removeUserReceiveEmails:
+              type: boolean
+            removeAllUserReceiveEmails:
+              type: boolean
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
+    PATCHSiteUserResponse:
+      allOf:
+        - $ref: "#/components/schemas/PATCHClusterResponse"
+        - type: object
+          properties:
+            setUserKeys:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeUserKeys:
+              type: string
+            removeAllUserKeys:
+              type: array
+              items:
+                type: string
+            addUserKeys:
+              type: string
+            addAllUserKeys:
+              type: array
+              items:
+                type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserKey:
+              type: string
+              nullable: true
+            removeUserKey:
+              type: string
+            removeAllUserKey:
+              type: string
+            setUserName:
+              type: string
+              nullable: true
+            removeUserName:
+              type: string
+            removeAllUserName:
+              type: string
+            setUserEmail:
+              type: string
+              nullable: true
+            removeUserEmail:
+              type: string
+            removeAllUserEmail:
+              type: string
+            setUserFirstName:
+              type: string
+              nullable: true
+            removeUserFirstName:
+              type: string
+            removeAllUserFirstName:
+              type: string
+            setUserLastName:
+              type: string
+              nullable: true
+            removeUserLastName:
+              type: string
+            removeAllUserLastName:
+              type: string
+            setUserFullName:
+              type: string
+              nullable: true
+            removeUserFullName:
+              type: string
+            removeAllUserFullName:
+              type: string
+            setUserSite:
+              type: string
+              nullable: true
+            removeUserSite:
+              type: string
+            removeAllUserSite:
+              type: string
+            setCustomerProfileId:
+              type: string
+              nullable: true
+            removeCustomerProfileId:
+              type: string
+            removeAllCustomerProfileId:
+              type: string
+            setUserReceiveEmails:
+              type: boolean
+              nullable: true
+            removeUserReceiveEmails:
+              type: boolean
+            removeAllUserReceiveEmails:
+              type: boolean
+            setSeeArchived:
+              type: boolean
+              nullable: true
+            removeSeeArchived:
+              type: boolean
+            removeAllSeeArchived:
+              type: boolean
+            setSeeDeleted:
+              type: boolean
+              nullable: true
+            removeSeeDeleted:
+              type: boolean
+            removeAllSeeDeleted:
+              type: boolean
+    POSTSiteUserRequest:
+      allOf:
+        - $ref: "#/components/schemas/POSTClusterRequest"
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            userSite:
+              type: string
+            customerProfileId:
+              type: string
+            userReceiveEmails:
+              type: boolean
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    POSTSiteUserResponse:
+      allOf:
+        - $ref: "#/components/schemas/POSTClusterResponse"
+        - type: object
+          properties:
+            userKeys:
+              type: array
+              items:
+                type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            userName:
+              type: string
+            userEmail:
+              type: string
+            userFirstName:
+              type: string
+            userLastName:
+              type: string
+            userFullName:
+              type: string
+            userSite:
+              type: string
+            customerProfileId:
+              type: string
+            userReceiveEmails:
+              type: boolean
+            seeArchived:
+              type: boolean
+            seeDeleted:
+              type: boolean
+    SearchPageSiteUserResponse:
+      allOf:
+        - type: string
+    POSTClusterRequest:
+      allOf:
+        - type: object
+          properties:
+            pk:
+              type: string
+            inheritPk:
+              type: string
+            id:
+              type: string
+            created:
+              type: string
+            modified:
+              type: string
+            archived:
+              type: boolean
+            deleted:
+              type: boolean
+            classCanonicalName:
+              type: string
+            classSimpleName:
+              type: string
+            classCanonicalNames:
+              type: array
+              items:
+                type: string
+            sessionId:
+              type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            saves:
+              type: array
+              items:
+                type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            objectNameVar:
+              type: string
+            objectSuggest:
+              type: string
+            objectText:
+              type: string
+            pageUrlId:
+              type: string
+            pageUrlPk:
+              type: string
+            pageUrlApi:
+              type: string
+            pageH1:
+              type: string
+    POSTClusterResponse:
+      allOf:
+        - type: object
+          properties:
+            pk:
+              type: string
+            inheritPk:
+              type: string
+            id:
+              type: string
+            created:
+              type: string
+            modified:
+              type: string
+            archived:
+              type: boolean
+            deleted:
+              type: boolean
+            classCanonicalName:
+              type: string
+            classSimpleName:
+              type: string
+            classCanonicalNames:
+              type: array
+              items:
+                type: string
+            sessionId:
+              type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            saves:
+              type: array
+              items:
+                type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            objectNameVar:
+              type: string
+            objectSuggest:
+              type: string
+            objectText:
+              type: string
+            pageUrlId:
+              type: string
+            pageUrlPk:
+              type: string
+            pageUrlApi:
+              type: string
+            pageH1:
+              type: string
+    PUTClusterRequest:
+      allOf:
+        - type: object
+          properties:
+            pk:
+              type: string
+            inheritPk:
+              type: string
+            id:
+              type: string
+            created:
+              type: string
+            modified:
+              type: string
+            archived:
+              type: boolean
+            deleted:
+              type: boolean
+            classCanonicalName:
+              type: string
+            classSimpleName:
+              type: string
+            classCanonicalNames:
+              type: array
+              items:
+                type: string
+            sessionId:
+              type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            saves:
+              type: array
+              items:
+                type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            objectNameVar:
+              type: string
+            objectSuggest:
+              type: string
+            objectText:
+              type: string
+            pageUrlId:
+              type: string
+            pageUrlPk:
+              type: string
+            pageUrlApi:
+              type: string
+            pageH1:
+              type: string
+    PUTClusterResponse:
+      allOf:
+        - type: object
+          properties:
+            pk:
+              type: string
+            inheritPk:
+              type: string
+            id:
+              type: string
+            created:
+              type: string
+            modified:
+              type: string
+            archived:
+              type: boolean
+            deleted:
+              type: boolean
+            classCanonicalName:
+              type: string
+            classSimpleName:
+              type: string
+            classCanonicalNames:
+              type: array
+              items:
+                type: string
+            sessionId:
+              type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            saves:
+              type: array
+              items:
+                type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            objectNameVar:
+              type: string
+            objectSuggest:
+              type: string
+            objectText:
+              type: string
+            pageUrlId:
+              type: string
+            pageUrlPk:
+              type: string
+            pageUrlApi:
+              type: string
+            pageH1:
+              type: string
+    PATCHClusterRequest:
+      allOf:
+        - type: object
+          properties:
+            setPk:
+              type: string
+              nullable: true
+            removePk:
+              type: string
+            removeAllPk:
+              type: string
+            setInheritPk:
+              type: string
+              nullable: true
+            removeInheritPk:
+              type: string
+            removeAllInheritPk:
+              type: string
+            setId:
+              type: string
+              nullable: true
+            removeId:
+              type: string
+            removeAllId:
+              type: string
+            setCreated:
+              type: string
+              nullable: true
+            removeCreated:
+              type: string
+            removeAllCreated:
+              type: string
+            setModified:
+              type: string
+              nullable: true
+            removeModified:
+              type: string
+            removeAllModified:
+              type: string
+            setArchived:
+              type: boolean
+              nullable: true
+            removeArchived:
+              type: boolean
+            removeAllArchived:
+              type: boolean
+            setDeleted:
+              type: boolean
+              nullable: true
+            removeDeleted:
+              type: boolean
+            removeAllDeleted:
+              type: boolean
+            setClassCanonicalName:
+              type: string
+              nullable: true
+            removeClassCanonicalName:
+              type: string
+            removeAllClassCanonicalName:
+              type: string
+            setClassSimpleName:
+              type: string
+              nullable: true
+            removeClassSimpleName:
+              type: string
+            removeAllClassSimpleName:
+              type: string
+            setClassCanonicalNames:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeClassCanonicalNames:
+              type: string
+            removeAllClassCanonicalNames:
+              type: array
+              items:
+                type: string
+            addClassCanonicalNames:
+              type: string
+            addAllClassCanonicalNames:
+              type: array
+              items:
+                type: string
+            setSessionId:
+              type: string
+              nullable: true
+            removeSessionId:
+              type: string
+            removeAllSessionId:
+              type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserKey:
+              type: string
+              nullable: true
+            removeUserKey:
+              type: string
+            removeAllUserKey:
+              type: string
+            setSaves:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeSaves:
+              type: string
+            removeAllSaves:
+              type: array
+              items:
+                type: string
+            addSaves:
+              type: string
+            addAllSaves:
+              type: array
+              items:
+                type: string
+            setObjectTitle:
+              type: string
+              nullable: true
+            removeObjectTitle:
+              type: string
+            removeAllObjectTitle:
+              type: string
+            setObjectId:
+              type: string
+              nullable: true
+            removeObjectId:
+              type: string
+            removeAllObjectId:
+              type: string
+            setObjectNameVar:
+              type: string
+              nullable: true
+            removeObjectNameVar:
+              type: string
+            removeAllObjectNameVar:
+              type: string
+            setObjectSuggest:
+              type: string
+              nullable: true
+            removeObjectSuggest:
+              type: string
+            removeAllObjectSuggest:
+              type: string
+            setObjectText:
+              type: string
+              nullable: true
+            removeObjectText:
+              type: string
+            removeAllObjectText:
+              type: string
+            setPageUrlId:
+              type: string
+              nullable: true
+            removePageUrlId:
+              type: string
+            removeAllPageUrlId:
+              type: string
+            setPageUrlPk:
+              type: string
+              nullable: true
+            removePageUrlPk:
+              type: string
+            removeAllPageUrlPk:
+              type: string
+            setPageUrlApi:
+              type: string
+              nullable: true
+            removePageUrlApi:
+              type: string
+            removeAllPageUrlApi:
+              type: string
+            setPageH1:
+              type: string
+              nullable: true
+            removePageH1:
+              type: string
+            removeAllPageH1:
+              type: string
+    PATCHClusterResponse:
+      allOf:
+        - type: object
+          properties:
+            setPk:
+              type: string
+              nullable: true
+            removePk:
+              type: string
+            removeAllPk:
+              type: string
+            setInheritPk:
+              type: string
+              nullable: true
+            removeInheritPk:
+              type: string
+            removeAllInheritPk:
+              type: string
+            setId:
+              type: string
+              nullable: true
+            removeId:
+              type: string
+            removeAllId:
+              type: string
+            setCreated:
+              type: string
+              nullable: true
+            removeCreated:
+              type: string
+            removeAllCreated:
+              type: string
+            setModified:
+              type: string
+              nullable: true
+            removeModified:
+              type: string
+            removeAllModified:
+              type: string
+            setArchived:
+              type: boolean
+              nullable: true
+            removeArchived:
+              type: boolean
+            removeAllArchived:
+              type: boolean
+            setDeleted:
+              type: boolean
+              nullable: true
+            removeDeleted:
+              type: boolean
+            removeAllDeleted:
+              type: boolean
+            setClassCanonicalName:
+              type: string
+              nullable: true
+            removeClassCanonicalName:
+              type: string
+            removeAllClassCanonicalName:
+              type: string
+            setClassSimpleName:
+              type: string
+              nullable: true
+            removeClassSimpleName:
+              type: string
+            removeAllClassSimpleName:
+              type: string
+            setClassCanonicalNames:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeClassCanonicalNames:
+              type: string
+            removeAllClassCanonicalNames:
+              type: array
+              items:
+                type: string
+            addClassCanonicalNames:
+              type: string
+            addAllClassCanonicalNames:
+              type: array
+              items:
+                type: string
+            setSessionId:
+              type: string
+              nullable: true
+            removeSessionId:
+              type: string
+            removeAllSessionId:
+              type: string
+            setUserId:
+              type: string
+              nullable: true
+            removeUserId:
+              type: string
+            removeAllUserId:
+              type: string
+            setUserKey:
+              type: string
+              nullable: true
+            removeUserKey:
+              type: string
+            removeAllUserKey:
+              type: string
+            setSaves:
+              type: array
+              nullable: true
+              items:
+                type: string
+            removeSaves:
+              type: string
+            removeAllSaves:
+              type: array
+              items:
+                type: string
+            addSaves:
+              type: string
+            addAllSaves:
+              type: array
+              items:
+                type: string
+            setObjectTitle:
+              type: string
+              nullable: true
+            removeObjectTitle:
+              type: string
+            removeAllObjectTitle:
+              type: string
+            setObjectId:
+              type: string
+              nullable: true
+            removeObjectId:
+              type: string
+            removeAllObjectId:
+              type: string
+            setObjectNameVar:
+              type: string
+              nullable: true
+            removeObjectNameVar:
+              type: string
+            removeAllObjectNameVar:
+              type: string
+            setObjectSuggest:
+              type: string
+              nullable: true
+            removeObjectSuggest:
+              type: string
+            removeAllObjectSuggest:
+              type: string
+            setObjectText:
+              type: string
+              nullable: true
+            removeObjectText:
+              type: string
+            removeAllObjectText:
+              type: string
+            setPageUrlId:
+              type: string
+              nullable: true
+            removePageUrlId:
+              type: string
+            removeAllPageUrlId:
+              type: string
+            setPageUrlPk:
+              type: string
+              nullable: true
+            removePageUrlPk:
+              type: string
+            removeAllPageUrlPk:
+              type: string
+            setPageUrlApi:
+              type: string
+              nullable: true
+            removePageUrlApi:
+              type: string
+            removeAllPageUrlApi:
+              type: string
+            setPageH1:
+              type: string
+              nullable: true
+            removePageH1:
+              type: string
+            removeAllPageH1:
+              type: string
+    SearchClusterResponse:
+      allOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              pk:
+                type: string
+              inheritPk:
+                type: string
+              id:
+                type: string
+              created:
+                type: string
+              modified:
+                type: string
+              archived:
+                type: boolean
+              deleted:
+                type: boolean
+              classCanonicalName:
+                type: string
+              classSimpleName:
+                type: string
+              classCanonicalNames:
+                type: array
+                items:
+                  type: string
+              sessionId:
+                type: string
+              userId:
+                type: string
+              userKey:
+                type: string
+              saves:
+                type: array
+                items:
+                  type: string
+              objectTitle:
+                type: string
+              objectId:
+                type: string
+              objectNameVar:
+                type: string
+              objectSuggest:
+                type: string
+              objectText:
+                type: string
+              pageUrlId:
+                type: string
+              pageUrlPk:
+                type: string
+              pageUrlApi:
+                type: string
+              pageH1:
+                type: string
+    GETClusterResponse:
+      allOf:
+        - type: object
+          properties:
+            pk:
+              type: string
+            inheritPk:
+              type: string
+            id:
+              type: string
+            created:
+              type: string
+            modified:
+              type: string
+            archived:
+              type: boolean
+            deleted:
+              type: boolean
+            classCanonicalName:
+              type: string
+            classSimpleName:
+              type: string
+            classCanonicalNames:
+              type: array
+              items:
+                type: string
+            sessionId:
+              type: string
+            userId:
+              type: string
+            userKey:
+              type: string
+            saves:
+              type: array
+              items:
+                type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            objectNameVar:
+              type: string
+            objectSuggest:
+              type: string
+            objectText:
+              type: string
+            pageUrlId:
+              type: string
+            pageUrlPk:
+              type: string
+            pageUrlApi:
+              type: string
+            pageH1:
+              type: string
+    ErrorResponse:
+      required:
+        - type
+        - code
+      properties:
+        type:
+          type: string
+          enum:
+            - ERROR
+            - WARN
+            - INVALID
+            - FATAL
+          description: >+
+            <br>invalid - Request did not confirm to the specification and was
+            unprocessed & rejected. Please fix the value and try again</br>       
+            <br>warn - Request was partially processed.  E.g. some of the fields
+            are missing in response to the system issues,  request was accepted
+            successfully but will be processed asynchronously</br>                
+            <br>error - The request was accepted but could not be processed
+            successfully</br>            <br>fatal - There was an internal system
+            error while processing the request. These are technical errors and
+            will be resolved by Citi, and the consumer should retry after some
+            time. Business errors will not be categorized as fatal </br>
+        code:
+          type: string
+          description: Error code which qualifies the error. 
+        details:
+          type: string
+          description: Human readable explanation specific to the occurrence of the problem. 
+        location:
+          type: string
+          description: The name of the field that resulted in the error. 
+        moreInfo:
+          type: string
+          description: URI to human readable documentation of the error. 
