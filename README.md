@@ -11,19 +11,19 @@ sudo yum install -y python3 python3-pip
 With the latest version of Python, you can install the lastest version of Ansible. 
 
 ```bash
-pip3 install --user ansible
+sudo pip3 install ansible
 ```
 
 Install the required Ansible dependencies for setting up a PostgreSQL database. 
 
 ```bash
-pip3 install --user psycopg2-binary
+sudo pip3 install psycopg2-binary
 ```
 
 Install the Ansible dependencies to deploy the application to the OpenShift cloud environment. 
 
 ```bash
-pip3 install --user openshift
+sudo pip3 install openshift
 ```
 
 ## Enable SSH
