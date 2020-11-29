@@ -20,5 +20,5 @@ COMPUTATE_SRC: /usr/local/src/computate
 ZOOKEEPER_HOST_NAME: localhost
 ZOOKEEPER_PORT: 2181
 JAVA_HOME: /usr/lib/jvm/java-1.8.0-openjdk
-target: computate_solr
+target: opendatapolicing_solr
 
