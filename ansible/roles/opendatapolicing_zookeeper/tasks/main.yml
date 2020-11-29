@@ -9,15 +9,11 @@
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
-- name: Clone the {{ZOOKEEPER_NAME}} source code. 
-  git:
-    repo: "{{ZOOKEEPER_REPO}}"
-    dest: "{{ZOOKEEPER_SRC}}"
-    version: "{{ZOOKEEPER_TAG}}"
 - name: Download the {{ZOOKEEPER_NAME}} application. 
-  uri: 
+  get_url: 
     url: "{{ ZOOKEEPER_DOWNLOAD_URL }}"
     dest: "{{ ZOOKEEPER_DOWNLOAD_DEST }}"
+    checksum: "sha512:{{ ZOOKEEPER_DOWNLOAD_SHA512 }}"
 - name: Create the {{ZOOKEEPER_NAME}} install directory {{ZOOKEEPER_OPT}}. 
   file:
     name: "{{ZOOKEEPER_OPT}}"
