@@ -1,7 +1,8 @@
 ---
 - name: Install a recent PostgreSQL database
   hosts: "{{ target }}"
-  gather_facts: no
+  vars_files: 
+    - "vaults/{{ VAULT_ID }}"
   roles:
-    - computate_postgres
+    - opendatapolicing_postgres
 
