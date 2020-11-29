@@ -26,7 +26,7 @@ OPENDATAPOLICING_SERVICE: "watch-{{OPENDATAPOLICING_NAME}}"
 # The systemd service file for opendatapolicing that generates and translates most of the code. 
 OPENDATAPOLICING_SYSTEMD: "/usr/lib/systemd/system/{{OPENDATAPOLICING_SERVICE}}.service"
 # The main git repository for the opendatapolicing project. 
-OPENDATAPOLICING_REPO: "git@github.com:opendatapolicing/opendatapolicing.git"
+OPENDATAPOLICING_REPO: "git@github.com:computate/opendatapolicing.git"
 # The target ansible inventory group for the opendatapolicing project to setup your own hosts under this name to deploy the application to. 
 target: opendatapolicing
 

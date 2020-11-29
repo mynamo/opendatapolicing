@@ -1,7 +1,7 @@
 - name: Install {{OPENDATAPOLICING_NAME}} dependencies
   connection: local
   package:
-    name: [git,java-latest-openjdk-devel,java-latest-openjdk]
+    name: [git,maven,java-latest-openjdk-devel,java-latest-openjdk]
   become: yes
 - name: Create the {{OPENDATAPOLICING_NAME}} source directory {{OPENDATAPOLICING_SRC}}
   connection: local
@@ -118,14 +118,17 @@
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
+  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
 - name: Create the {{OPENDATAPOLICING_NAME}} keystore properties {{SSL_KEYSTORE_PATH}}/{{SSL_PROPERTIES_FILENAME}}
   connection: local
   template:
     src: opendatapolicing_keystore.properties.j2
     dest: "{{SSL_KEYSTORE_PATH}}/{{OPENDATAPOLICING_SSL_PROPERTIES_FILENAME}}"
+  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
 - name: Create the {{OPENDATAPOLICING_NAME}} keystore jks {{SSL_JKS_PATH}}
   connection: local
   shell: echo {{SSL_JKS_BASE64}} | base64 -d > {{SSL_JKS_PATH}}
+  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
 - name: Build the source code in /usr/local/src/computate
   connection: local
   shell: "mvn clean install"
