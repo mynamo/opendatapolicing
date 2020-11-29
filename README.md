@@ -1,68 +1,41 @@
 
-# Description
-
-# Prerequisites
-
-## What is the first step to creating my own website?
-
-### Choose a domain name. 
-
-https://www.computate.org/enUS/course/001/001-choose-domain-name
-
-For Red Hat employees, see Christopher Tate for details about a domain name you can use for development, or feel free to obtain your own for practice. 
-
-## What can I do once I have purchased a domain name?
-
-### Obtain a valid TLS certificate for free, for security and credibility. 
-
-https://www.computate.org/enUS/course/001/008-how-to-obtain-free-tls-certificates
-
-For Red Hat employees, see Christopher Tate for details about the TLS certificates you can use for development, or feel free to generate your own for practice. 
-
-## Where can I host the project online? 
-
-### Red Hat OpenShift Online is the very best open source cloud hosting available. 
-
-https://www.openshift.com/products/online/
-
-For Red Hat employees, you can get permission from your manager to create a free OpenShift account to deploy to: 
-
-https://employee.openshift.com/register/employee/introduction
-
 # Installation
 
 The installation of the project for both development and production in containers is completely automated with Ansible. 
-Begin by installing both the ansible and python3 packages. 
+Begin by installing both the python3 packages for the latest version of Python and Pip Python package installer. 
 
 ```bash
-sudo yum install -y ansible python3 python3-pip
-sudo pip3 install psycopg2
+sudo yum install -y python3 python3-pip
 ```
 
-## Ansible on older operating systems. 
-
-If you have an older operating system that does not yet support python3, you may struggle to deploy the application on OpenShift in the cloud. The OpenShift Ansible modules seem to require python3 as the system library, so I recommend updating your operating system to something more recent, for example CentOS8 or RHEL8. 
-
-On older operating systems, to deploy the development applications you might want to configure ansible for python2. 
-
-To deploy to OpenShift, you will want to configure ansible to point to python3. 
-
-You might update your ansible configuration like this to make it work: 
-
-```
-sudo vim /etc/ansible/ansible.cfg
-```
-
-```
-[defaults]
-interpreter_python=/usr/bin/python3
-```
-
-Your dependencies might be different on an older operating system. 
+With the latest version of Python, you can install the lastest version of Ansible. 
 
 ```bash
-sudo yum install -y ansible python python-pip
-sudo pip install psycopg2
+pip3 install --user ansible
+```
+
+Install the required Ansible dependencies for setting up a PostgreSQL database. 
+
+```bash
+pip3 install --user psycopg2-binary
+```
+
+Install the Ansible dependencies to deploy the application to the OpenShift cloud environment. 
+
+```bash
+pip3 install --user openshift
+```
+
+## Enable SSH
+
+Also, make sure your machine allows ssh. If you are on a linux machine (Fedora):
+
+```bash
+sudo yum install -y openssh-server
+sudo systemctl start sshd.service
+sudo systemctl enable sshd.service
+ssh localhost (say yes to creating the fingerprint)
+exit
 ```
 
 ## Ansible training. 
