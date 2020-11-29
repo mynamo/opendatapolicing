@@ -1,0 +1,8 @@
+---
+- name: Install the opendatapolicing source code and watch service on the target. 
+  hosts: "{{ target }}"
+  vars_files: 
+    - "vaults/{{ VAULT_ID }}"
+  roles:
+    - opendatapolicing
+
