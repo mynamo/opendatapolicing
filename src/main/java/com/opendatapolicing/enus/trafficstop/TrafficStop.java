@@ -100,7 +100,7 @@ import com.opendatapolicing.enus.wrap.Wrap;
  * 
  * Rows: 100
  * 
- * Map.hackathonMission: to define the TrafficStop Java class that collects stop, search, and use-of-force police data publicly available to ensure transparency
+ * Map.hackathonMission: to create a new Java class TrafficStop to define the TrafficStop Java class that collects stop, search, and use-of-force police data publicly available to ensure transparency
  **/     
 public class TrafficStop extends TrafficStopGen<Cluster> {
 
