@@ -479,16 +479,24 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), ROLES)
 				) {
 			e("i").a("class", "far fa-search w3-xxlarge w3-cell w3-cell-middle ").f().g("i");
-				e("input")
-					.a("type", "text")
-					.a("placeholder", "state")
-					.a("class", "value suggestStateKey w3-input w3-border w3-cell w3-cell-middle ")
-					.a("name", "setStateKey")
-					.a("id", classApiMethodMethod, "_stateKey")
-					.a("autocomplete", "off");
-					if("Page".equals(classApiMethodMethod)) {
-						a("oninput", "suggestSiteAgencyStateKey($(this).val() ? searchSiteStateFilters($(this.parentElement)) : [", pk == null ? "" : "{'name':'fq','value':'agencyKeys:" + pk + "'}", "], $('#listSiteAgencyStateKey_", classApiMethodMethod, "'), ", pk, "); ");
-					}
+			if("PUTCopy".equals(classApiMethodMethod)) {
+				{ e("div").f();
+					e("input")
+						.a("type", "checkbox")
+						.a("id", classApiMethodMethod, "_stateKey_clear")
+						.a("class", "stateKey_clear ")
+						.fg();
+					e("label").a("for", "classApiMethodMethod, \"_stateKey_clear").f().sx("clear").g("label");
+				} g("div");
+			}
+			e("input")
+				.a("type", "text")
+				.a("placeholder", "state")
+				.a("class", "value suggestStateKey w3-input w3-border w3-cell w3-cell-middle ")
+				.a("name", "setStateKey")
+				.a("id", classApiMethodMethod, "_stateKey")
+				.a("autocomplete", "off");
+				a("oninput", "suggestSiteAgencyStateKey($(this).val() ? searchSiteStateFilters($(this.parentElement)) : [", pk == null ? "" : "{'name':'fq','value':'agencyKeys:" + pk + "'}", "], $('#listSiteAgencyStateKey_", classApiMethodMethod, "'), ", pk, "); ");
 
 				fg();
 
@@ -530,14 +538,16 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 										CollectionUtils.containsAny(siteRequest_.getUserResourceRoles(), SiteState.ROLES)
 										|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), SiteState.ROLES)
 										) {
-									{ e("div").a("class", "w3-cell-row ").f();
-										e("button")
-											.a("class", "w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-pale-blue ")
-											.a("id", classApiMethodMethod, "_stateKey_add")
-											.a("onclick", "$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postSiteStateVals({ agencyKeys: [ \"", pk, "\" ] }, function() {}, function() { addError($('#", classApiMethodMethod, "stateKey')); });")
-											.f().sx("add a state")
-										.g("button");
-									} g("div");
+									if("Page".equals(classApiMethodMethod)) {
+										{ e("div").a("class", "w3-cell-row ").f();
+											e("button")
+												.a("class", "w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-pale-blue ")
+												.a("id", classApiMethodMethod, "_stateKey_add")
+												.a("onclick", "$(this).addClass('w3-disabled'); this.disabled = true; this.innerHTML = 'Sending…'; postSiteStateVals({ agencyKeys: [ \"", pk, "\" ] }, function() {}, function() { addError($('#", classApiMethodMethod, "stateKey')); });")
+												.f().sx("add a state")
+											.g("button");
+										} g("div");
+									}
 								}
 							} g("div");
 						} g("div");
@@ -987,145 +997,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 		} g("div");
 	}
 
-	////////////////////
-	// reportCardKeys //
-	////////////////////
-
-	/**	 The entity reportCardKeys
-	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<Long>(). 
-	 */
-	@JsonSerialize(contentUsing = ToStringSerializer.class)
-	@JsonInclude(Include.NON_NULL)
-	protected List<Long> reportCardKeys = new ArrayList<Long>();
-	@JsonIgnore
-	public Wrap<List<Long>> reportCardKeysWrap = new Wrap<List<Long>>().p(this).c(List.class).var("reportCardKeys").o(reportCardKeys);
-
-	/**	<br/> The entity reportCardKeys
-	 *  It is constructed before being initialized with the constructor by default List<Long>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.agency.SiteAgency&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:reportCardKeys">Find the entity reportCardKeys in Solr</a>
-	 * <br/>
-	 * @param reportCardKeys is the entity already constructed. 
-	 **/
-	protected abstract void _reportCardKeys(List<Long> c);
-
-	public List<Long> getReportCardKeys() {
-		return reportCardKeys;
-	}
-
-	public void setReportCardKeys(List<Long> reportCardKeys) {
-		this.reportCardKeys = reportCardKeys;
-		this.reportCardKeysWrap.alreadyInitialized = true;
-	}
-	public void setReportCardKeys(String o) {
-		Long l = SiteAgency.staticSetReportCardKeys(siteRequest_, o);
-		if(l != null)
-			addReportCardKeys(l);
-		this.reportCardKeysWrap.alreadyInitialized = true;
-	}
-	public static Long staticSetReportCardKeys(SiteRequestEnUS siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Long.parseLong(o);
-		return null;
-	}
-	public SiteAgency addReportCardKeys(Long...objets) {
-		for(Long o : objets) {
-			addReportCardKeys(o);
-		}
-		return (SiteAgency)this;
-	}
-	public SiteAgency addReportCardKeys(Long o) {
-		if(o != null && !reportCardKeys.contains(o))
-			this.reportCardKeys.add(o);
-		return (SiteAgency)this;
-	}
-	public void setReportCardKeys(JsonArray objets) {
-		reportCardKeys.clear();
-		for(int i = 0; i < objets.size(); i++) {
-			Long o = objets.getLong(i);
-			addReportCardKeys(o);
-		}
-	}
-	public SiteAgency addReportCardKeys(String o) {
-		if(NumberUtils.isParsable(o)) {
-			Long p = Long.parseLong(o);
-			addReportCardKeys(p);
-		}
-		return (SiteAgency)this;
-	}
-	protected SiteAgency reportCardKeysInit() {
-		if(!reportCardKeysWrap.alreadyInitialized) {
-			_reportCardKeys(reportCardKeys);
-		}
-		reportCardKeysWrap.alreadyInitialized(true);
-		return (SiteAgency)this;
-	}
-
-	public static Long staticSolrReportCardKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o;
-	}
-
-	public static String staticSolrStrReportCardKeys(SiteRequestEnUS siteRequest_, Long o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqReportCardKeys(SiteRequestEnUS siteRequest_, String o) {
-		return SiteAgency.staticSolrStrReportCardKeys(siteRequest_, SiteAgency.staticSolrReportCardKeys(siteRequest_, SiteAgency.staticSetReportCardKeys(siteRequest_, o)));
-	}
-
-	public List<Long> solrReportCardKeys() {
-		List<Long> l = new ArrayList<Long>();
-		for(Long o : reportCardKeys) {
-			l.add(SiteAgency.staticSolrReportCardKeys(siteRequest_, o));
-		}
-		return l;
-	}
-
-	public String strReportCardKeys() {
-		return reportCardKeys == null ? "" : reportCardKeys.toString();
-	}
-
-	public String jsonReportCardKeys() {
-		return reportCardKeys == null ? "" : reportCardKeys.toString();
-	}
-
-	public String nomAffichageReportCardKeys() {
-		return "report cards";
-	}
-
-	public String htmTooltipReportCardKeys() {
-		return null;
-	}
-
-	public String htmReportCardKeys() {
-		return reportCardKeys == null ? "" : StringEscapeUtils.escapeHtml4(strReportCardKeys());
-	}
-
-	public void inputReportCardKeys(String classApiMethodMethod) {
-		SiteAgency s = (SiteAgency)this;
-	}
-
-	public void htmReportCardKeys(String classApiMethodMethod) {
-		SiteAgency s = (SiteAgency)this;
-		{ e("div").a("class", "w3-cell w3-cell-top w3-center w3-mobile ").f();
-			if("Page".equals(classApiMethodMethod)) {
-				{ e("div").a("class", "w3-padding ").f();
-					{ e("div").a("class", "w3-card ").f();
-						{ e("div").a("class", "w3-cell-row w3-pale-yellow ").f();
-							e("label").a("class", "").f().sx("report cards").g("label");
-						} g("div");
-						{ e("div").a("class", "w3-cell-row  ").f();
-							{ e("div").a("class", "w3-cell ").f();
-								{ e("div").a("class", "w3-rest ").f();
-									e("span").a("class", "varSiteAgency", pk, "ReportCardKeys ").f().sx(strReportCardKeys()).g("span");
-								} g("div");
-							} g("div");
-						} g("div");
-					} g("div");
-				} g("div");
-			}
-		} g("div");
-	}
-
 	/////////////
 	// stateId //
 	/////////////
@@ -1535,7 +1406,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 		imageLeftInit();
 		imageTopInit();
 		imageCoordsInit();
-		reportCardKeysInit();
 		stateIdInit();
 		stateNameInit();
 		stateAbbreviationInit();
@@ -1597,8 +1467,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				return oSiteAgency.imageTop;
 			case "imageCoords":
 				return oSiteAgency.imageCoords;
-			case "reportCardKeys":
-				return oSiteAgency.reportCardKeys;
 			case "stateId":
 				return oSiteAgency.stateId;
 			case "stateName":
@@ -1666,8 +1534,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 			return SiteAgency.staticSetImageTop(siteRequest_, o);
 		case "imageCoords":
 			return SiteAgency.staticSetImageCoords(siteRequest_, o);
-		case "reportCardKeys":
-			return SiteAgency.staticSetReportCardKeys(siteRequest_, o);
 		case "stateId":
 			return SiteAgency.staticSetStateId(siteRequest_, o);
 		case "stateName":
@@ -1704,8 +1570,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 			return SiteAgency.staticSolrImageTop(siteRequest_, (Integer)o);
 		case "imageCoords":
 			return SiteAgency.staticSolrImageCoords(siteRequest_, (String)o);
-		case "reportCardKeys":
-			return SiteAgency.staticSolrReportCardKeys(siteRequest_, (Long)o);
 		case "stateId":
 			return SiteAgency.staticSolrStateId(siteRequest_, (String)o);
 		case "stateName":
@@ -1742,8 +1606,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 			return SiteAgency.staticSolrStrImageTop(siteRequest_, (Integer)o);
 		case "imageCoords":
 			return SiteAgency.staticSolrStrImageCoords(siteRequest_, (String)o);
-		case "reportCardKeys":
-			return SiteAgency.staticSolrStrReportCardKeys(siteRequest_, (Long)o);
 		case "stateId":
 			return SiteAgency.staticSolrStrStateId(siteRequest_, (String)o);
 		case "stateName":
@@ -1780,8 +1642,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 			return SiteAgency.staticSolrFqImageTop(siteRequest_, o);
 		case "imageCoords":
 			return SiteAgency.staticSolrFqImageCoords(siteRequest_, o);
-		case "reportCardKeys":
-			return SiteAgency.staticSolrFqReportCardKeys(siteRequest_, o);
 		case "stateId":
 			return SiteAgency.staticSolrFqStateId(siteRequest_, o);
 		case "stateName":
@@ -1887,12 +1747,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				String imageCoords = (String)solrDocument.get("imageCoords_stored_string");
 				if(imageCoords != null)
 					oSiteAgency.setImageCoords(imageCoords);
-			}
-
-			if(saves.contains("reportCardKeys")) {
-				List<Long> reportCardKeys = (List<Long>)solrDocument.get("reportCardKeys_stored_longs");
-				if(reportCardKeys != null)
-					oSiteAgency.reportCardKeys.addAll(reportCardKeys);
 			}
 
 			if(saves.contains("stateId")) {
@@ -2015,14 +1869,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 			document.addField("imageCoords_indexed_string", imageCoords);
 			document.addField("imageCoords_stored_string", imageCoords);
 		}
-		if(reportCardKeys != null) {
-			for(java.lang.Long o : reportCardKeys) {
-				document.addField("reportCardKeys_indexed_longs", o);
-			}
-			for(java.lang.Long o : reportCardKeys) {
-				document.addField("reportCardKeys_stored_longs", o);
-			}
-		}
 		if(stateId != null) {
 			document.addField("stateId_indexed_string", stateId);
 			document.addField("stateId_stored_string", stateId);
@@ -2078,8 +1924,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				return "imageTop_indexed_int";
 			case "imageCoords":
 				return "imageCoords_indexed_string";
-			case "reportCardKeys":
-				return "reportCardKeys_indexed_longs";
 			case "stateId":
 				return "stateId_indexed_string";
 			case "stateName":
@@ -2143,10 +1987,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 		if(imageCoords != null)
 			oSiteAgency.setImageCoords(imageCoords);
 
-		List<Long> reportCardKeys = (List<Long>)solrDocument.get("reportCardKeys_stored_longs");
-		if(reportCardKeys != null)
-			oSiteAgency.reportCardKeys.addAll(reportCardKeys);
-
 		String stateId = (String)solrDocument.get("stateId_stored_string");
 		if(stateId != null)
 			oSiteAgency.setStateId(stateId);
@@ -2191,8 +2031,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				apiRequest.addVars("imageTop");
 			if(!Objects.equals(imageCoords, original.getImageCoords()))
 				apiRequest.addVars("imageCoords");
-			if(!Objects.equals(reportCardKeys, original.getReportCardKeys()))
-				apiRequest.addVars("reportCardKeys");
 			if(!Objects.equals(stateId, original.getStateId()))
 				apiRequest.addVars("stateId");
 			if(!Objects.equals(stateName, original.getStateName()))
@@ -2212,7 +2050,7 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 	//////////////
 
 	@Override public int hashCode() {
-		return Objects.hash(super.hashCode(), agencyKey, agencyName, stateKey, imageLeft, imageTop, imageCoords, reportCardKeys, stateId, stateName, stateAbbreviation, agencyOnlyName, agencyCompleteName);
+		return Objects.hash(super.hashCode(), agencyKey, agencyName, stateKey, imageLeft, imageTop, imageCoords, stateId, stateName, stateAbbreviation, agencyOnlyName, agencyCompleteName);
 	}
 
 	////////////
@@ -2232,7 +2070,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 				&& Objects.equals( imageLeft, that.imageLeft )
 				&& Objects.equals( imageTop, that.imageTop )
 				&& Objects.equals( imageCoords, that.imageCoords )
-				&& Objects.equals( reportCardKeys, that.reportCardKeys )
 				&& Objects.equals( stateId, that.stateId )
 				&& Objects.equals( stateName, that.stateName )
 				&& Objects.equals( stateAbbreviation, that.stateAbbreviation )
@@ -2254,7 +2091,6 @@ public abstract class SiteAgencyGen<DEV> extends Cluster {
 		sb.append( ", imageLeft: " ).append(imageLeft);
 		sb.append( ", imageTop: " ).append(imageTop);
 		sb.append( ", imageCoords: \"" ).append(imageCoords).append( "\"" );
-		sb.append( ", reportCardKeys: " ).append(reportCardKeys);
 		sb.append( ", stateId: \"" ).append(stateId).append( "\"" );
 		sb.append( ", stateName: \"" ).append(stateName).append( "\"" );
 		sb.append( ", stateAbbreviation: \"" ).append(stateAbbreviation).append( "\"" );

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.math.MathContext;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 	protected void _listSiteUser(Wrap<SearchList<SiteUser>> c) {
 	}
 
-	protected void _siteUser(Wrap<SiteUser> c) {
+	protected void _siteUser_(Wrap<SiteUser> c) {
 		if(listSiteUser != null && listSiteUser.size() == 1)
 			c.o(listSiteUser.get(0));
 	}
@@ -69,12 +70,14 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 	}
 
 	@Override protected void _pageTitle(Wrap<String> c) {
-		if(siteUser != null && siteUser.getObjectTitle() != null)
-			c.o(siteUser.getObjectTitle());
-		else if(siteUser != null)
-			c.o("");
+		if(siteUser_ != null && siteUser_.getObjectTitle() != null)
+			c.o(siteUser_.getObjectTitle());
+		else if(siteUser_ != null)
+			c.o("site users");
 		else if(listSiteUser == null || listSiteUser.size() == 0)
 			c.o("no site user found");
+		else
+			c.o("site users");
 	}
 
 	@Override protected void _pageUri(Wrap<String> c) {
@@ -201,13 +204,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 			o.htmSeeDeleted("PUTCopy");
 			o.htmCustomerProfileId("PUTCopy");
 		} g("div");
-		{ e("div").a("class", "w3-cell-row ").f();
-			o.htmUserId("PUTCopy");
-			o.htmUserKey("PUTCopy");
-			o.htmUserId("PUTCopy");
-			o.htmUserKey("PUTCopy");
-			o.htmUserName("PUTCopy");
-		} g("div");
 	}
 
 	public void htmlFormPATCHSiteUser(SiteUser o) {
@@ -224,13 +220,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 			o.htmSeeArchived("PATCH");
 			o.htmSeeDeleted("PATCH");
 			o.htmCustomerProfileId("PATCH");
-		} g("div");
-		{ e("div").a("class", "w3-cell-row ").f();
-			o.htmUserId("PATCH");
-			o.htmUserKey("PATCH");
-			o.htmUserId("PATCH");
-			o.htmUserKey("PATCH");
-			o.htmUserName("PATCH");
 		} g("div");
 	}
 
@@ -558,17 +547,14 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 							e("span").a("class", "w3-button w3-display-topright ").a("onclick", "$('#patchSiteUserModal').hide(); ").f().sx("×").g("span");
 							e("h2").a("class", "w3-padding ").f().sx("Modify site users").g("h2");
 						} g("header");
-						{ e("div").a("class", "w3-container ").f();
+						{ e("div").a("class", "w3-container ").a("id", "patchSiteUserFormValues").f();
 							SiteUser o = new SiteUser();
 							o.setSiteRequest_(siteRequest_);
 
-							// FormValues PATCH
-							{ e("form").a("action", "").a("id", "patchSiteUserFormValues").a("onsubmit", "event.preventDefault(); return false; ").f();
-								htmlFormPATCHSiteUser(o);
-							} g("form");
+							htmlFormPATCHSiteUser(o);
 							e("button")
 								.a("class", "w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-margin w3- ")
-								.a("onclick", "patchSiteUser(null, $('#patchSiteUserFormValues'), ", Optional.ofNullable(siteUser).map(SiteUser::getPk).map(a -> a.toString()).orElse("null"), ", function() {}, function() {}); ")
+								.a("onclick", "patchSiteUser(null, $('#patchSiteUserFormValues'), ", Optional.ofNullable(siteUser_).map(SiteUser::getPk).map(a -> a.toString()).orElse("null"), ", function() {}, function() {}); ")
 								.f().sx("Modify site users")
 							.g("button");
 
@@ -592,7 +578,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 							e("span").a("class", "w3-button w3-display-topright ").a("onclick", "$('#postSiteUserModal').hide(); ").f().sx("×").g("span");
 							e("h2").a("class", "w3-padding ").f().sx("Create a site user").g("h2");
 						} g("header");
-						{ e("div").a("class", "w3-container ").f();
+						{ e("div").a("class", "w3-container ").a("id", "postSiteUserFormValues").f();
 							SiteUser o = new SiteUser();
 							o.setSiteRequest_(siteRequest_);
 
@@ -695,7 +681,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 					.a("name", "suggestSiteUser")
 					.a("id", "suggestSiteUser", id)
 					.a("autocomplete", "off")
-					.a("oninput", "suggestSiteUserObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() } ], $('#suggestListSiteUser", id, "'), ", p.getSiteRequest_().getRequestPk(), "); ")
+					.a("oninput", "suggestSiteUserObjectSuggest( [ { 'name': 'q', 'value': 'objectSuggest:' + $(this).val() }, { 'name': 'rows', 'value': '10' }, { 'name': 'fl', 'value': 'pk,pageUrlPk,objectTitle' } ], $('#suggestListSiteUser", id, "'), ", p.getSiteRequest_().getRequestPk(), "); ")
 					.a("onkeyup", "if (event.keyCode === 13) { event.preventDefault(); window.location.href = '/user?q=", query1, ":' + encodeURIComponent(this.value) + '", fqs, sorts, "&start=", start2, "&rows=", rows1, "'; }"); 
 				if(listSiteUser != null)
 					p.a("value", query2);

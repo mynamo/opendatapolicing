@@ -9,6 +9,8 @@ public class PomXml {
 
 	/**
 	 * DisplayName.enUS: Maven artifact
+	 * enUS: Create a new file: /usr/local/src/opendatapolicing/pom.xml
+	 * enUS: 
 	 * enUS: Setup a Maven groupId, artifactId and version for the opendatapolicing project. 
 	 */
 	public void partArtifact() {

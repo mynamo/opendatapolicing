@@ -47,7 +47,7 @@ import com.opendatapolicing.enus.xml.UtilXml;
  * Role.enUS: SiteAdmin
  * RoleRead.enUS: User
  */   
-public class Cluster extends ClusterGen<Object> {       
+public class Cluster extends ClusterGen<Object> {      
 
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {}
 

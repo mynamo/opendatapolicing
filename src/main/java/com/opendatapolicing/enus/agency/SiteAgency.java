@@ -145,18 +145,6 @@ public class SiteAgency extends SiteAgencyGen<Cluster> {
 	protected void _imageCoords(Wrap<String> c) {
 	}
 
-	/**  
-	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
-	 * Attribute: ReportCard.agencyKey
-	 * HtmlRow: 5
-	 * HtmlCell: 2
-	 * DisplayName.enUS: report cards
-	 */          
-	protected void _reportCardKeys(List<Long> c) {
-	}
-
 	/**   
 	 * {@inheritDoc}
 	 * Indexed: true

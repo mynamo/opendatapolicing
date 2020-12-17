@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.user;
+package com.opendatapolicing.enus.trafficsearch;
 
 import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import org.apache.commons.collections.CollectionUtils;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.opendatapolicing.enus.user.SiteUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.logging.Logger;
+import com.opendatapolicing.enus.trafficsearch.TrafficSearch;
 import java.math.RoundingMode;
 import com.opendatapolicing.enus.wrap.Wrap;
 import java.math.MathContext;
@@ -34,137 +34,137 @@ import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.trafficsearch.TrafficSearchGenPage&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
-public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
-	protected static final Logger LOGGER = LoggerFactory.getLogger(SiteUserGenPage.class);
+public abstract class TrafficSearchGenPageGen<DEV> extends PageLayout {
+	protected static final Logger LOGGER = LoggerFactory.getLogger(TrafficSearchGenPage.class);
 
-	//////////////////
-	// listSiteUser //
-	//////////////////
+	///////////////////////
+	// listTrafficSearch //
+	///////////////////////
 
-	/**	 The entity listSiteUser
+	/**	 The entity listTrafficSearch
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
-	protected SearchList<SiteUser> listSiteUser;
+	protected SearchList<TrafficSearch> listTrafficSearch;
 	@JsonIgnore
-	public Wrap<SearchList<SiteUser>> listSiteUserWrap = new Wrap<SearchList<SiteUser>>().p(this).c(SearchList.class).var("listSiteUser").o(listSiteUser);
+	public Wrap<SearchList<TrafficSearch>> listTrafficSearchWrap = new Wrap<SearchList<TrafficSearch>>().p(this).c(SearchList.class).var("listTrafficSearch").o(listTrafficSearch);
 
-	/**	<br/> The entity listSiteUser
+	/**	<br/> The entity listTrafficSearch
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listSiteUser">Find the entity listSiteUser in Solr</a>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.trafficsearch.TrafficSearchGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:listTrafficSearch">Find the entity listTrafficSearch in Solr</a>
 	 * <br/>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _listSiteUser(Wrap<SearchList<SiteUser>> c);
+	protected abstract void _listTrafficSearch(Wrap<SearchList<TrafficSearch>> c);
 
-	public SearchList<SiteUser> getListSiteUser() {
-		return listSiteUser;
+	public SearchList<TrafficSearch> getListTrafficSearch() {
+		return listTrafficSearch;
 	}
 
-	public void setListSiteUser(SearchList<SiteUser> listSiteUser) {
-		this.listSiteUser = listSiteUser;
-		this.listSiteUserWrap.alreadyInitialized = true;
+	public void setListTrafficSearch(SearchList<TrafficSearch> listTrafficSearch) {
+		this.listTrafficSearch = listTrafficSearch;
+		this.listTrafficSearchWrap.alreadyInitialized = true;
 	}
-	public static SearchList<SiteUser> staticSetListSiteUser(SiteRequestEnUS siteRequest_, String o) {
+	public static SearchList<TrafficSearch> staticSetListTrafficSearch(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected SiteUserGenPage listSiteUserInit() {
-		if(!listSiteUserWrap.alreadyInitialized) {
-			_listSiteUser(listSiteUserWrap);
-			if(listSiteUser == null)
-				setListSiteUser(listSiteUserWrap.o);
+	protected TrafficSearchGenPage listTrafficSearchInit() {
+		if(!listTrafficSearchWrap.alreadyInitialized) {
+			_listTrafficSearch(listTrafficSearchWrap);
+			if(listTrafficSearch == null)
+				setListTrafficSearch(listTrafficSearchWrap.o);
 		}
-		if(listSiteUser != null)
-			listSiteUser.initDeepForClass(siteRequest_);
-		listSiteUserWrap.alreadyInitialized(true);
-		return (SiteUserGenPage)this;
+		if(listTrafficSearch != null)
+			listTrafficSearch.initDeepForClass(siteRequest_);
+		listTrafficSearchWrap.alreadyInitialized(true);
+		return (TrafficSearchGenPage)this;
 	}
 
-	///////////////
-	// siteUser_ //
-	///////////////
+	////////////////////
+	// trafficSearch_ //
+	////////////////////
 
-	/**	 The entity siteUser_
+	/**	 The entity trafficSearch_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
-	protected SiteUser siteUser_;
+	protected TrafficSearch trafficSearch_;
 	@JsonIgnore
-	public Wrap<SiteUser> siteUser_Wrap = new Wrap<SiteUser>().p(this).c(SiteUser.class).var("siteUser_").o(siteUser_);
+	public Wrap<TrafficSearch> trafficSearch_Wrap = new Wrap<TrafficSearch>().p(this).c(TrafficSearch.class).var("trafficSearch_").o(trafficSearch_);
 
-	/**	<br/> The entity siteUser_
+	/**	<br/> The entity trafficSearch_
 	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.user.SiteUserGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteUser_">Find the entity siteUser_ in Solr</a>
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.trafficsearch.TrafficSearchGenPage&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:trafficSearch_">Find the entity trafficSearch_ in Solr</a>
 	 * <br/>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _siteUser_(Wrap<SiteUser> c);
+	protected abstract void _trafficSearch_(Wrap<TrafficSearch> c);
 
-	public SiteUser getSiteUser_() {
-		return siteUser_;
+	public TrafficSearch getTrafficSearch_() {
+		return trafficSearch_;
 	}
 
-	public void setSiteUser_(SiteUser siteUser_) {
-		this.siteUser_ = siteUser_;
-		this.siteUser_Wrap.alreadyInitialized = true;
+	public void setTrafficSearch_(TrafficSearch trafficSearch_) {
+		this.trafficSearch_ = trafficSearch_;
+		this.trafficSearch_Wrap.alreadyInitialized = true;
 	}
-	public static SiteUser staticSetSiteUser_(SiteRequestEnUS siteRequest_, String o) {
+	public static TrafficSearch staticSetTrafficSearch_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
-	protected SiteUserGenPage siteUser_Init() {
-		if(!siteUser_Wrap.alreadyInitialized) {
-			_siteUser_(siteUser_Wrap);
-			if(siteUser_ == null)
-				setSiteUser_(siteUser_Wrap.o);
+	protected TrafficSearchGenPage trafficSearch_Init() {
+		if(!trafficSearch_Wrap.alreadyInitialized) {
+			_trafficSearch_(trafficSearch_Wrap);
+			if(trafficSearch_ == null)
+				setTrafficSearch_(trafficSearch_Wrap.o);
 		}
-		siteUser_Wrap.alreadyInitialized(true);
-		return (SiteUserGenPage)this;
+		trafficSearch_Wrap.alreadyInitialized(true);
+		return (TrafficSearchGenPage)this;
 	}
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedSiteUserGenPage = false;
+	protected boolean alreadyInitializedTrafficSearchGenPage = false;
 
-	public SiteUserGenPage initDeepSiteUserGenPage(SiteRequestEnUS siteRequest_) {
+	public TrafficSearchGenPage initDeepTrafficSearchGenPage(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedSiteUserGenPage) {
-			alreadyInitializedSiteUserGenPage = true;
-			initDeepSiteUserGenPage();
+		if(!alreadyInitializedTrafficSearchGenPage) {
+			alreadyInitializedTrafficSearchGenPage = true;
+			initDeepTrafficSearchGenPage();
 		}
-		return (SiteUserGenPage)this;
+		return (TrafficSearchGenPage)this;
 	}
 
-	public void initDeepSiteUserGenPage() {
-		initSiteUserGenPage();
+	public void initDeepTrafficSearchGenPage() {
+		initTrafficSearchGenPage();
 		super.initDeepPageLayout(siteRequest_);
 	}
 
-	public void initSiteUserGenPage() {
-		listSiteUserInit();
-		siteUser_Init();
+	public void initTrafficSearchGenPage() {
+		listTrafficSearchInit();
+		trafficSearch_Init();
 	}
 
 	@Override public void initDeepForClass(SiteRequestEnUS siteRequest_) {
-		initDeepSiteUserGenPage(siteRequest_);
+		initDeepTrafficSearchGenPage(siteRequest_);
 	}
 
 	/////////////////
 	// siteRequest //
 	/////////////////
 
-	public void siteRequestSiteUserGenPage(SiteRequestEnUS siteRequest_) {
+	public void siteRequestTrafficSearchGenPage(SiteRequestEnUS siteRequest_) {
 			super.siteRequestPageLayout(siteRequest_);
-		if(listSiteUser != null)
-			listSiteUser.setSiteRequest_(siteRequest_);
+		if(listTrafficSearch != null)
+			listTrafficSearch.setSiteRequest_(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequestEnUS siteRequest_) {
-		siteRequestSiteUserGenPage(siteRequest_);
+		siteRequestTrafficSearchGenPage(siteRequest_);
 	}
 
 	/////////////
@@ -176,7 +176,7 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = obtainSiteUserGenPage(v);
+				o = obtainTrafficSearchGenPage(v);
 			else if(o instanceof Cluster) {
 				Cluster cluster = (Cluster)o;
 				o = cluster.obtainForClass(v);
@@ -184,13 +184,13 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		}
 		return o;
 	}
-	public Object obtainSiteUserGenPage(String var) {
-		SiteUserGenPage oSiteUserGenPage = (SiteUserGenPage)this;
+	public Object obtainTrafficSearchGenPage(String var) {
+		TrafficSearchGenPage oTrafficSearchGenPage = (TrafficSearchGenPage)this;
 		switch(var) {
-			case "listSiteUser":
-				return oSiteUserGenPage.listSiteUser;
-			case "siteUser_":
-				return oSiteUserGenPage.siteUser_;
+			case "listTrafficSearch":
+				return oTrafficSearchGenPage.listTrafficSearch;
+			case "trafficSearch_":
+				return oTrafficSearchGenPage.trafficSearch_;
 			default:
 				return super.obtainPageLayout(var);
 		}
@@ -205,7 +205,7 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeSiteUserGenPage(v, val);
+				o = attributeTrafficSearchGenPage(v, val);
 			else if(o instanceof Cluster) {
 				Cluster cluster = (Cluster)o;
 				o = cluster.attributeForClass(v, val);
@@ -213,8 +213,8 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		}
 		return o != null;
 	}
-	public Object attributeSiteUserGenPage(String var, Object val) {
-		SiteUserGenPage oSiteUserGenPage = (SiteUserGenPage)this;
+	public Object attributeTrafficSearchGenPage(String var, Object val) {
+		TrafficSearchGenPage oTrafficSearchGenPage = (TrafficSearchGenPage)this;
 		switch(var) {
 			default:
 				return super.attributePageLayout(var, val);
@@ -226,9 +226,9 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	///////////////
 
 	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSetSiteUserGenPage(entityVar,  siteRequest_, o);
+		return staticSetTrafficSearchGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSetSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static Object staticSetTrafficSearchGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
 				return PageLayout.staticSetPageLayout(entityVar,  siteRequest_, o);
@@ -240,9 +240,9 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	////////////////
 
 	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrSiteUserGenPage(entityVar,  siteRequest_, o);
+		return staticSolrTrafficSearchGenPage(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSolrSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static Object staticSolrTrafficSearchGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return PageLayout.staticSolrPageLayout(entityVar,  siteRequest_, o);
@@ -254,9 +254,9 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	///////////////////
 
 	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
-		return staticSolrStrSiteUserGenPage(entityVar,  siteRequest_, o);
+		return staticSolrStrTrafficSearchGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrStrSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+	public static String staticSolrStrTrafficSearchGenPage(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return PageLayout.staticSolrStrPageLayout(entityVar,  siteRequest_, o);
@@ -268,9 +268,9 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	//////////////////
 
 	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
-		return staticSolrFqSiteUserGenPage(entityVar,  siteRequest_, o);
+		return staticSolrFqTrafficSearchGenPage(entityVar,  siteRequest_, o);
 	}
-	public static String staticSolrFqSiteUserGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+	public static String staticSolrFqTrafficSearchGenPage(String entityVar, SiteRequestEnUS siteRequest_, String o) {
 		switch(entityVar) {
 			default:
 				return PageLayout.staticSolrFqPageLayout(entityVar,  siteRequest_, o);
@@ -287,7 +287,7 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		if(val != null) {
 			for(String v : vars) {
 				if(o == null)
-					o = defineSiteUserGenPage(v, val);
+					o = defineTrafficSearchGenPage(v, val);
 				else if(o instanceof Cluster) {
 					Cluster cluster = (Cluster)o;
 					o = cluster.defineForClass(v, val);
@@ -296,7 +296,7 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		}
 		return o != null;
 	}
-	public Object defineSiteUserGenPage(String var, String val) {
+	public Object defineTrafficSearchGenPage(String var, String val) {
 		switch(var) {
 			default:
 				return super.definePageLayout(var, val);
@@ -308,11 +308,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	/////////////////
 
 	@Override public void htmlScripts() {
-		htmlScriptsSiteUserGenPage();
+		htmlScriptsTrafficSearchGenPage();
 		super.htmlScripts();
 	}
 
-	public void htmlScriptsSiteUserGenPage() {
+	public void htmlScriptsTrafficSearchGenPage() {
 	}
 
 	////////////////
@@ -320,11 +320,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	////////////////
 
 	@Override public void htmlScript() {
-		htmlScriptSiteUserGenPage();
+		htmlScriptTrafficSearchGenPage();
 		super.htmlScript();
 	}
 
-	public void htmlScriptSiteUserGenPage() {
+	public void htmlScriptTrafficSearchGenPage() {
 	}
 
 	//////////////
@@ -332,11 +332,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	//////////////
 
 	@Override public void htmlBody() {
-		htmlBodySiteUserGenPage();
+		htmlBodyTrafficSearchGenPage();
 		super.htmlBody();
 	}
 
-	public void htmlBodySiteUserGenPage() {
+	public void htmlBodyTrafficSearchGenPage() {
 	}
 
 	//////////
@@ -344,11 +344,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	//////////
 
 	@Override public void html() {
-		htmlSiteUserGenPage();
+		htmlTrafficSearchGenPage();
 		super.html();
 	}
 
-	public void htmlSiteUserGenPage() {
+	public void htmlTrafficSearchGenPage() {
 	}
 
 	//////////////
@@ -356,11 +356,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	//////////////
 
 	@Override public void htmlMeta() {
-		htmlMetaSiteUserGenPage();
+		htmlMetaTrafficSearchGenPage();
 		super.htmlMeta();
 	}
 
-	public void htmlMetaSiteUserGenPage() {
+	public void htmlMetaTrafficSearchGenPage() {
 	}
 
 	////////////////
@@ -368,11 +368,11 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	////////////////
 
 	@Override public void htmlStyles() {
-		htmlStylesSiteUserGenPage();
+		htmlStylesTrafficSearchGenPage();
 		super.htmlStyles();
 	}
 
-	public void htmlStylesSiteUserGenPage() {
+	public void htmlStylesTrafficSearchGenPage() {
 	}
 
 	///////////////
@@ -380,22 +380,22 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	///////////////
 
 	@Override public void htmlStyle() {
-		htmlStyleSiteUserGenPage();
+		htmlStyleTrafficSearchGenPage();
 		super.htmlStyle();
 	}
 
-	public void htmlStyleSiteUserGenPage() {
+	public void htmlStyleTrafficSearchGenPage() {
 	}
 
 	//////////////////
 	// apiRequest //
 	//////////////////
 
-	public void apiRequestSiteUserGenPage() {
+	public void apiRequestTrafficSearchGenPage() {
 		ApiRequest apiRequest = Optional.ofNullable(siteRequest_).map(SiteRequestEnUS::getApiRequest_).orElse(null);
 		Object o = Optional.ofNullable(apiRequest).map(ApiRequest::getOriginal).orElse(null);
-		if(o != null && o instanceof SiteUserGenPage) {
-			SiteUserGenPage original = (SiteUserGenPage)o;
+		if(o != null && o instanceof TrafficSearchGenPage) {
+			TrafficSearchGenPage original = (TrafficSearchGenPage)o;
 			super.apiRequestPageLayout();
 		}
 	}
@@ -415,9 +415,9 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	@Override public boolean equals(Object o) {
 		if(this == o)
 			return true;
-		if(!(o instanceof SiteUserGenPage))
+		if(!(o instanceof TrafficSearchGenPage))
 			return false;
-		SiteUserGenPage that = (SiteUserGenPage)o;
+		TrafficSearchGenPage that = (TrafficSearchGenPage)o;
 		return super.equals(o);
 	}
 
@@ -428,7 +428,7 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString() + "\n");
-		sb.append("SiteUserGenPage { ");
+		sb.append("TrafficSearchGenPage { ");
 		sb.append(" }");
 		return sb.toString();
 	}

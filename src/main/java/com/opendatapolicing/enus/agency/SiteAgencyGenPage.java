@@ -158,7 +158,6 @@ public class SiteAgencyGenPage extends SiteAgencyGenPageGen<PageLayout> {
 		} g("div");
 		{ e("div").a("class", "w3-cell-row ").f();
 			o.htmStateKey("Page");
-			o.htmReportCardKeys("Page");
 		} g("div");
 	}
 
@@ -183,7 +182,6 @@ public class SiteAgencyGenPage extends SiteAgencyGenPageGen<PageLayout> {
 		} g("div");
 		{ e("div").a("class", "w3-cell-row ").f();
 			o.htmStateKey("POST");
-			o.htmReportCardKeys("POST");
 		} g("div");
 	}
 
@@ -276,7 +274,6 @@ public class SiteAgencyGenPage extends SiteAgencyGenPageGen<PageLayout> {
 		} g("div");
 		{ e("div").a("class", "w3-cell-row ").f();
 			o.htmStateKey("Search");
-			o.htmReportCardKeys("Search");
 		} g("div");
 		{ e("div").a("class", "w3-cell-row ").f();
 			o.htmUserId("Search");

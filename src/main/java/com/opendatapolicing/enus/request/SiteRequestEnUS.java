@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.request;         
+package com.opendatapolicing.enus.request;        
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -213,6 +213,12 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 	protected void _requestPk(Wrap<Long> c) {
 		if(operationRequest != null)
 			c.o(operationRequest.getParams().getLong("pk"));
+	}
+
+	protected void _requestUri(Wrap<String> c) {
+	}
+
+	protected void _requestMethod(Wrap<String> c) {
 	}
 
 	protected void _tx(Wrap<Transaction> c) {

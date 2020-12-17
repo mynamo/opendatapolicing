@@ -1,56 +1,57 @@
 package com.opendatapolicing.enus.request;
 
 import java.util.Arrays;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.solr.common.SolrDocumentList;
-import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
+import java.lang.Long;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import java.util.Map;
+import io.vertx.core.json.JsonObject;
+import io.vertx.sqlclient.Transaction;
+import io.vertx.core.logging.Logger;
+import java.math.RoundingMode;
+import io.vertx.core.http.CaseInsensitiveHeaders;
+import com.opendatapolicing.enus.wrap.Wrap;
+import java.math.MathContext;
+import com.opendatapolicing.enus.writer.AllWriter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.opendatapolicing.enus.request.api.ApiRequest;
+import com.opendatapolicing.enus.context.SiteContextEnUS;
+import java.util.Objects;
+import java.util.List;
+import org.apache.solr.client.solrj.SolrQuery;
+import java.util.Optional;
+import com.opendatapolicing.enus.cluster.Cluster;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import java.util.HashMap;
 import java.text.NumberFormat;
 import io.vertx.core.logging.LoggerFactory;
 import java.util.Stack;
 import java.util.ArrayList;
 import io.vertx.sqlclient.SqlConnection;
 import org.apache.commons.collections.CollectionUtils;
-import java.lang.Long;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.opendatapolicing.enus.user.SiteUser;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.Boolean;
-import io.vertx.core.json.JsonObject;
 import java.lang.String;
-import io.vertx.sqlclient.Transaction;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.http.CaseInsensitiveHeaders;
-import com.opendatapolicing.enus.wrap.Wrap;
-import java.math.MathContext;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import io.vertx.core.Vertx;
-import com.opendatapolicing.enus.writer.AllWriter;
 import org.apache.commons.text.StringEscapeUtils;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.opendatapolicing.enus.request.api.ApiRequest;
-import com.opendatapolicing.enus.context.SiteContextEnUS;
-import java.util.Objects;
 import io.vertx.core.json.JsonArray;
 import org.apache.solr.common.SolrDocument;
-import java.util.List;
 import io.vertx.ext.web.api.OperationRequest;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.commons.lang3.math.NumberUtils;
-import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.lang.Object;
-import com.opendatapolicing.enus.cluster.Cluster;
 import com.opendatapolicing.enus.config.SiteConfig;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true">Trouver la classe  dans Solr</a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
 public abstract class SiteRequestEnUSGen<DEV> extends Object {
@@ -60,7 +61,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// siteContext_ //
 	//////////////////
 
-	/**	L'entité « siteContext_ »
+	/**	 The entity siteContext_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -68,11 +69,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SiteContextEnUS> siteContext_Wrap = new Wrap<SiteContextEnUS>().p(this).c(SiteContextEnUS.class).var("siteContext_").o(siteContext_);
 
-	/**	<br/>L'entité « siteContext_ »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteContext_">Trouver l'entité siteContext_ dans Solr</a>
+	/**	<br/> The entity siteContext_
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteContext_">Find the entity siteContext_ in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteContext_(Wrap<SiteContextEnUS> c);
 
@@ -83,6 +84,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSiteContext_(SiteContextEnUS siteContext_) {
 		this.siteContext_ = siteContext_;
 		this.siteContext_Wrap.alreadyInitialized = true;
+	}
+	public static SiteContextEnUS staticSetSiteContext_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS siteContext_Init() {
 		if(!siteContext_Wrap.alreadyInitialized) {
@@ -98,7 +102,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// siteConfig_ //
 	/////////////////
 
-	/**	L'entité « siteConfig_ »
+	/**	 The entity siteConfig_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -106,11 +110,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SiteConfig> siteConfig_Wrap = new Wrap<SiteConfig>().p(this).c(SiteConfig.class).var("siteConfig_").o(siteConfig_);
 
-	/**	<br/>L'entité « siteConfig_ »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteConfig_">Trouver l'entité siteConfig_ dans Solr</a>
+	/**	<br/> The entity siteConfig_
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteConfig_">Find the entity siteConfig_ in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteConfig_(Wrap<SiteConfig> c);
 
@@ -121,6 +125,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSiteConfig_(SiteConfig siteConfig_) {
 		this.siteConfig_ = siteConfig_;
 		this.siteConfig_Wrap.alreadyInitialized = true;
+	}
+	public static SiteConfig staticSetSiteConfig_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS siteConfig_Init() {
 		if(!siteConfig_Wrap.alreadyInitialized) {
@@ -136,7 +143,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// siteRequest_ //
 	//////////////////
 
-	/**	L'entité « siteRequest_ »
+	/**	 The entity siteRequest_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -144,11 +151,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().p(this).c(SiteRequestEnUS.class).var("siteRequest_").o(siteRequest_);
 
-	/**	<br/>L'entité « siteRequest_ »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Trouver l'entité siteRequest_ dans Solr</a>
+	/**	<br/> The entity siteRequest_
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
 
@@ -159,6 +166,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
 		this.siteRequest_Wrap.alreadyInitialized = true;
+	}
+	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS siteRequest_Init() {
 		if(!siteRequest_Wrap.alreadyInitialized) {
@@ -174,7 +184,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// apiRequest_ //
 	/////////////////
 
-	/**	L'entité « apiRequest_ »
+	/**	 The entity apiRequest_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -182,11 +192,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<ApiRequest> apiRequest_Wrap = new Wrap<ApiRequest>().p(this).c(ApiRequest.class).var("apiRequest_").o(apiRequest_);
 
-	/**	<br/>L'entité « apiRequest_ »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:apiRequest_">Trouver l'entité apiRequest_ dans Solr</a>
+	/**	<br/> The entity apiRequest_
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:apiRequest_">Find the entity apiRequest_ in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _apiRequest_(Wrap<ApiRequest> c);
 
@@ -197,6 +207,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setApiRequest_(ApiRequest apiRequest_) {
 		this.apiRequest_ = apiRequest_;
 		this.apiRequest_Wrap.alreadyInitialized = true;
+	}
+	public static ApiRequest staticSetApiRequest_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS apiRequest_Init() {
 		if(!apiRequest_Wrap.alreadyInitialized) {
@@ -212,7 +225,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// vertx //
 	///////////
 
-	/**	L'entité « vertx »
+	/**	 The entity vertx
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -220,11 +233,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Vertx> vertxWrap = new Wrap<Vertx>().p(this).c(Vertx.class).var("vertx").o(vertx);
 
-	/**	<br/>L'entité « vertx »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:vertx">Trouver l'entité vertx dans Solr</a>
+	/**	<br/> The entity vertx
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:vertx">Find the entity vertx in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _vertx(Wrap<Vertx> c);
 
@@ -235,6 +248,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setVertx(Vertx vertx) {
 		this.vertx = vertx;
 		this.vertxWrap.alreadyInitialized = true;
+	}
+	public static Vertx staticSetVertx(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS vertxInit() {
 		if(!vertxWrap.alreadyInitialized) {
@@ -250,7 +266,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// jsonObject //
 	////////////////
 
-	/**	L'entité « jsonObject »
+	/**	 The entity jsonObject
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -258,11 +274,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<JsonObject> jsonObjectWrap = new Wrap<JsonObject>().p(this).c(JsonObject.class).var("jsonObject").o(jsonObject);
 
-	/**	<br/>L'entité « jsonObject »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonObject">Trouver l'entité jsonObject dans Solr</a>
+	/**	<br/> The entity jsonObject
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonObject">Find the entity jsonObject in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _jsonObject(Wrap<JsonObject> c);
 
@@ -273,6 +289,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setJsonObject(JsonObject jsonObject) {
 		this.jsonObject = jsonObject;
 		this.jsonObjectWrap.alreadyInitialized = true;
+	}
+	public static JsonObject staticSetJsonObject(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS jsonObjectInit() {
 		if(!jsonObjectWrap.alreadyInitialized) {
@@ -288,7 +307,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// solrQuery //
 	///////////////
 
-	/**	L'entité « solrQuery »
+	/**	 The entity solrQuery
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -296,11 +315,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().p(this).c(SolrQuery.class).var("solrQuery").o(solrQuery);
 
-	/**	<br/>L'entité « solrQuery »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Trouver l'entité solrQuery dans Solr</a>
+	/**	<br/> The entity solrQuery
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrQuery">Find the entity solrQuery in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _solrQuery(Wrap<SolrQuery> c);
 
@@ -311,6 +330,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSolrQuery(SolrQuery solrQuery) {
 		this.solrQuery = solrQuery;
 		this.solrQueryWrap.alreadyInitialized = true;
+	}
+	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS solrQueryInit() {
 		if(!solrQueryWrap.alreadyInitialized) {
@@ -326,7 +348,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// operationRequest //
 	//////////////////////
 
-	/**	L'entité « operationRequest »
+	/**	 The entity operationRequest
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -334,11 +356,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<OperationRequest> operationRequestWrap = new Wrap<OperationRequest>().p(this).c(OperationRequest.class).var("operationRequest").o(operationRequest);
 
-	/**	<br/>L'entité « operationRequest »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:operationRequest">Trouver l'entité operationRequest dans Solr</a>
+	/**	<br/> The entity operationRequest
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:operationRequest">Find the entity operationRequest in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _operationRequest(Wrap<OperationRequest> c);
 
@@ -349,6 +371,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setOperationRequest(OperationRequest operationRequest) {
 		this.operationRequest = operationRequest;
 		this.operationRequestWrap.alreadyInitialized = true;
+	}
+	public static OperationRequest staticSetOperationRequest(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS operationRequestInit() {
 		if(!operationRequestWrap.alreadyInitialized) {
@@ -364,7 +389,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// queryResponse //
 	///////////////////
 
-	/**	L'entité « queryResponse »
+	/**	 The entity queryResponse
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -372,11 +397,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<QueryResponse> queryResponseWrap = new Wrap<QueryResponse>().p(this).c(QueryResponse.class).var("queryResponse").o(queryResponse);
 
-	/**	<br/>L'entité « queryResponse »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:queryResponse">Trouver l'entité queryResponse dans Solr</a>
+	/**	<br/> The entity queryResponse
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:queryResponse">Find the entity queryResponse in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _queryResponse(Wrap<QueryResponse> c);
 
@@ -387,6 +412,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setQueryResponse(QueryResponse queryResponse) {
 		this.queryResponse = queryResponse;
 		this.queryResponseWrap.alreadyInitialized = true;
+	}
+	public static QueryResponse staticSetQueryResponse(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS queryResponseInit() {
 		if(!queryResponseWrap.alreadyInitialized) {
@@ -402,7 +430,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// searchResults //
 	///////////////////
 
-	/**	L'entité « searchResults »
+	/**	 The entity searchResults
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -410,11 +438,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SolrDocumentList> searchResultsWrap = new Wrap<SolrDocumentList>().p(this).c(SolrDocumentList.class).var("searchResults").o(searchResults);
 
-	/**	<br/>L'entité « searchResults »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchResults">Trouver l'entité searchResults dans Solr</a>
+	/**	<br/> The entity searchResults
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:searchResults">Find the entity searchResults in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _searchResults(Wrap<SolrDocumentList> c);
 
@@ -425,6 +453,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSearchResults(SolrDocumentList searchResults) {
 		this.searchResults = searchResults;
 		this.searchResultsWrap.alreadyInitialized = true;
+	}
+	public static SolrDocumentList staticSetSearchResults(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS searchResultsInit() {
 		if(!searchResultsWrap.alreadyInitialized) {
@@ -440,7 +471,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// w //
 	///////
 
-	/**	L'entité « w »
+	/**	 The entity w
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -448,11 +479,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<AllWriter> wWrap = new Wrap<AllWriter>().p(this).c(AllWriter.class).var("w").o(w);
 
-	/**	<br/>L'entité « w »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:w">Trouver l'entité w dans Solr</a>
+	/**	<br/> The entity w
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:w">Find the entity w in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _w(Wrap<AllWriter> c);
 
@@ -463,6 +494,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setW(AllWriter w) {
 		this.w = w;
 		this.wWrap.alreadyInitialized = true;
+	}
+	public static AllWriter staticSetW(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS wInit() {
 		if(!wWrap.alreadyInitialized) {
@@ -480,7 +514,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userVertx //
 	///////////////
 
-	/**	L'entité « userVertx »
+	/**	 The entity userVertx
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -488,11 +522,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<JsonObject> userVertxWrap = new Wrap<JsonObject>().p(this).c(JsonObject.class).var("userVertx").o(userVertx);
 
-	/**	<br/>L'entité « userVertx »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userVertx">Trouver l'entité userVertx dans Solr</a>
+	/**	<br/> The entity userVertx
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userVertx">Find the entity userVertx in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userVertx(Wrap<JsonObject> c);
 
@@ -503,6 +537,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setUserVertx(JsonObject userVertx) {
 		this.userVertx = userVertx;
 		this.userVertxWrap.alreadyInitialized = true;
+	}
+	public static JsonObject staticSetUserVertx(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS userVertxInit() {
 		if(!userVertxWrap.alreadyInitialized) {
@@ -518,7 +555,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// jsonPrincipal //
 	///////////////////
 
-	/**	L'entité « jsonPrincipal »
+	/**	 The entity jsonPrincipal
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -526,11 +563,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<JsonObject> jsonPrincipalWrap = new Wrap<JsonObject>().p(this).c(JsonObject.class).var("jsonPrincipal").o(jsonPrincipal);
 
-	/**	<br/>L'entité « jsonPrincipal »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonPrincipal">Trouver l'entité jsonPrincipal dans Solr</a>
+	/**	<br/> The entity jsonPrincipal
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:jsonPrincipal">Find the entity jsonPrincipal in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _jsonPrincipal(Wrap<JsonObject> c);
 
@@ -541,6 +578,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setJsonPrincipal(JsonObject jsonPrincipal) {
 		this.jsonPrincipal = jsonPrincipal;
 		this.jsonPrincipalWrap.alreadyInitialized = true;
+	}
+	public static JsonObject staticSetJsonPrincipal(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS jsonPrincipalInit() {
 		if(!jsonPrincipalWrap.alreadyInitialized) {
@@ -556,7 +596,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userId //
 	////////////
 
-	/**	L'entité « userId »
+	/**	 The entity userId
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -564,21 +604,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> userIdWrap = new Wrap<String>().p(this).c(String.class).var("userId").o(userId);
 
-	/**	<br/>L'entité « userId »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Trouver l'entité userId dans Solr</a>
+	/**	<br/> The entity userId
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userId(Wrap<String> c);
 
 	public String getUserId() {
 		return userId;
 	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserId(String o) {
+		this.userId = SiteRequestEnUS.staticSetUserId(siteRequest_, o);
 		this.userIdWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS userIdInit() {
 		if(!userIdWrap.alreadyInitialized) {
@@ -590,8 +632,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserId(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserId(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserId(siteRequest_, SiteRequestEnUS.staticSolrUserId(siteRequest_, SiteRequestEnUS.staticSetUserId(siteRequest_, o)));
+	}
+
 	public String solrUserId() {
-		return userId;
+		return SiteRequestEnUS.staticSolrUserId(siteRequest_, userId);
 	}
 
 	public String strUserId() {
@@ -618,7 +672,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userKey //
 	/////////////
 
-	/**	L'entité « userKey »
+	/**	 The entity userKey
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
@@ -627,11 +681,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Long> userKeyWrap = new Wrap<Long>().p(this).c(Long.class).var("userKey").o(userKey);
 
-	/**	<br/>L'entité « userKey »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Trouver l'entité userKey dans Solr</a>
+	/**	<br/> The entity userKey
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userKey(Wrap<Long> c);
 
@@ -643,11 +697,14 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		this.userKey = userKey;
 		this.userKeyWrap.alreadyInitialized = true;
 	}
-	public SiteRequestEnUS setUserKey(String o) {
-		if(NumberUtils.isParsable(o))
-			this.userKey = Long.parseLong(o);
+	public void setUserKey(String o) {
+		this.userKey = SiteRequestEnUS.staticSetUserKey(siteRequest_, o);
 		this.userKeyWrap.alreadyInitialized = true;
-		return (SiteRequestEnUS)this;
+	}
+	public static Long staticSetUserKey(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
 	}
 	protected SiteRequestEnUS userKeyInit() {
 		if(!userKeyWrap.alreadyInitialized) {
@@ -659,8 +716,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static Long staticSolrUserKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserKey(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserKey(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserKey(siteRequest_, SiteRequestEnUS.staticSolrUserKey(siteRequest_, SiteRequestEnUS.staticSetUserKey(siteRequest_, o)));
+	}
+
 	public Long solrUserKey() {
-		return userKey;
+		return SiteRequestEnUS.staticSolrUserKey(siteRequest_, userKey);
 	}
 
 	public String strUserKey() {
@@ -687,7 +756,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// sessionId //
 	///////////////
 
-	/**	L'entité « sessionId »
+	/**	 The entity sessionId
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -695,21 +764,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> sessionIdWrap = new Wrap<String>().p(this).c(String.class).var("sessionId").o(sessionId);
 
-	/**	<br/>L'entité « sessionId »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Trouver l'entité sessionId dans Solr</a>
+	/**	<br/> The entity sessionId
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _sessionId(Wrap<String> c);
 
 	public String getSessionId() {
 		return sessionId;
 	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
+	public void setSessionId(String o) {
+		this.sessionId = SiteRequestEnUS.staticSetSessionId(siteRequest_, o);
 		this.sessionIdWrap.alreadyInitialized = true;
+	}
+	public static String staticSetSessionId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS sessionIdInit() {
 		if(!sessionIdWrap.alreadyInitialized) {
@@ -721,8 +792,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrSessionId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSessionId(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSessionId(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrSessionId(siteRequest_, SiteRequestEnUS.staticSolrSessionId(siteRequest_, SiteRequestEnUS.staticSetSessionId(siteRequest_, o)));
+	}
+
 	public String solrSessionId() {
-		return sessionId;
+		return SiteRequestEnUS.staticSolrSessionId(siteRequest_, sessionId);
 	}
 
 	public String strSessionId() {
@@ -749,7 +832,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// sessionIdBefore //
 	/////////////////////
 
-	/**	L'entité « sessionIdBefore »
+	/**	 The entity sessionIdBefore
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -757,21 +840,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> sessionIdBeforeWrap = new Wrap<String>().p(this).c(String.class).var("sessionIdBefore").o(sessionIdBefore);
 
-	/**	<br/>L'entité « sessionIdBefore »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionIdBefore">Trouver l'entité sessionIdBefore dans Solr</a>
+	/**	<br/> The entity sessionIdBefore
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionIdBefore">Find the entity sessionIdBefore in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _sessionIdBefore(Wrap<String> c);
 
 	public String getSessionIdBefore() {
 		return sessionIdBefore;
 	}
-
-	public void setSessionIdBefore(String sessionIdBefore) {
-		this.sessionIdBefore = sessionIdBefore;
+	public void setSessionIdBefore(String o) {
+		this.sessionIdBefore = SiteRequestEnUS.staticSetSessionIdBefore(siteRequest_, o);
 		this.sessionIdBeforeWrap.alreadyInitialized = true;
+	}
+	public static String staticSetSessionIdBefore(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS sessionIdBeforeInit() {
 		if(!sessionIdBeforeWrap.alreadyInitialized) {
@@ -783,8 +868,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrSessionIdBefore(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrSessionIdBefore(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqSessionIdBefore(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrSessionIdBefore(siteRequest_, SiteRequestEnUS.staticSolrSessionIdBefore(siteRequest_, SiteRequestEnUS.staticSetSessionIdBefore(siteRequest_, o)));
+	}
+
 	public String solrSessionIdBefore() {
-		return sessionIdBefore;
+		return SiteRequestEnUS.staticSolrSessionIdBefore(siteRequest_, sessionIdBefore);
 	}
 
 	public String strSessionIdBefore() {
@@ -811,7 +908,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userName //
 	//////////////
 
-	/**	L'entité « userName »
+	/**	 The entity userName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -819,21 +916,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> userNameWrap = new Wrap<String>().p(this).c(String.class).var("userName").o(userName);
 
-	/**	<br/>L'entité « userName »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Trouver l'entité userName dans Solr</a>
+	/**	<br/> The entity userName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userName">Find the entity userName in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userName(Wrap<String> c);
 
 	public String getUserName() {
 		return userName;
 	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String o) {
+		this.userName = SiteRequestEnUS.staticSetUserName(siteRequest_, o);
 		this.userNameWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS userNameInit() {
 		if(!userNameWrap.alreadyInitialized) {
@@ -845,8 +944,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserName(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserName(siteRequest_, SiteRequestEnUS.staticSolrUserName(siteRequest_, SiteRequestEnUS.staticSetUserName(siteRequest_, o)));
+	}
+
 	public String solrUserName() {
-		return userName;
+		return SiteRequestEnUS.staticSolrUserName(siteRequest_, userName);
 	}
 
 	public String strUserName() {
@@ -873,7 +984,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userLastName //
 	//////////////////
 
-	/**	L'entité « userLastName »
+	/**	 The entity userLastName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -881,21 +992,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> userLastNameWrap = new Wrap<String>().p(this).c(String.class).var("userLastName").o(userLastName);
 
-	/**	<br/>L'entité « userLastName »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userLastName">Trouver l'entité userLastName dans Solr</a>
+	/**	<br/> The entity userLastName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userLastName">Find the entity userLastName in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userLastName(Wrap<String> c);
 
 	public String getUserLastName() {
 		return userLastName;
 	}
-
-	public void setUserLastName(String userLastName) {
-		this.userLastName = userLastName;
+	public void setUserLastName(String o) {
+		this.userLastName = SiteRequestEnUS.staticSetUserLastName(siteRequest_, o);
 		this.userLastNameWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserLastName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS userLastNameInit() {
 		if(!userLastNameWrap.alreadyInitialized) {
@@ -907,8 +1020,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserLastName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserLastName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserLastName(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserLastName(siteRequest_, SiteRequestEnUS.staticSolrUserLastName(siteRequest_, SiteRequestEnUS.staticSetUserLastName(siteRequest_, o)));
+	}
+
 	public String solrUserLastName() {
-		return userLastName;
+		return SiteRequestEnUS.staticSolrUserLastName(siteRequest_, userLastName);
 	}
 
 	public String strUserLastName() {
@@ -935,7 +1060,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userFirstName //
 	///////////////////
 
-	/**	L'entité « userFirstName »
+	/**	 The entity userFirstName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -943,21 +1068,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> userFirstNameWrap = new Wrap<String>().p(this).c(String.class).var("userFirstName").o(userFirstName);
 
-	/**	<br/>L'entité « userFirstName »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFirstName">Trouver l'entité userFirstName dans Solr</a>
+	/**	<br/> The entity userFirstName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFirstName">Find the entity userFirstName in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userFirstName(Wrap<String> c);
 
 	public String getUserFirstName() {
 		return userFirstName;
 	}
-
-	public void setUserFirstName(String userFirstName) {
-		this.userFirstName = userFirstName;
+	public void setUserFirstName(String o) {
+		this.userFirstName = SiteRequestEnUS.staticSetUserFirstName(siteRequest_, o);
 		this.userFirstNameWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserFirstName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS userFirstNameInit() {
 		if(!userFirstNameWrap.alreadyInitialized) {
@@ -969,8 +1096,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserFirstName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserFirstName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserFirstName(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserFirstName(siteRequest_, SiteRequestEnUS.staticSolrUserFirstName(siteRequest_, SiteRequestEnUS.staticSetUserFirstName(siteRequest_, o)));
+	}
+
 	public String solrUserFirstName() {
-		return userFirstName;
+		return SiteRequestEnUS.staticSolrUserFirstName(siteRequest_, userFirstName);
 	}
 
 	public String strUserFirstName() {
@@ -997,7 +1136,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userFullName //
 	//////////////////
 
-	/**	L'entité « userFullName »
+	/**	 The entity userFullName
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1005,21 +1144,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> userFullNameWrap = new Wrap<String>().p(this).c(String.class).var("userFullName").o(userFullName);
 
-	/**	<br/>L'entité « userFullName »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Trouver l'entité userFullName dans Solr</a>
+	/**	<br/> The entity userFullName
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userFullName">Find the entity userFullName in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userFullName(Wrap<String> c);
 
 	public String getUserFullName() {
 		return userFullName;
 	}
-
-	public void setUserFullName(String userFullName) {
-		this.userFullName = userFullName;
+	public void setUserFullName(String o) {
+		this.userFullName = SiteRequestEnUS.staticSetUserFullName(siteRequest_, o);
 		this.userFullNameWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserFullName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected SiteRequestEnUS userFullNameInit() {
 		if(!userFullNameWrap.alreadyInitialized) {
@@ -1031,8 +1172,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserFullName(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserFullName(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserFullName(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserFullName(siteRequest_, SiteRequestEnUS.staticSolrUserFullName(siteRequest_, SiteRequestEnUS.staticSetUserFullName(siteRequest_, o)));
+	}
+
 	public String solrUserFullName() {
-		return userFullName;
+		return SiteRequestEnUS.staticSolrUserFullName(siteRequest_, userFullName);
 	}
 
 	public String strUserFullName() {
@@ -1059,7 +1212,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userRealmRoles //
 	////////////////////
 
-	/**	L'entité « userRealmRoles »
+	/**	 The entity userRealmRoles
 	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1067,11 +1220,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<List<String>> userRealmRolesWrap = new Wrap<List<String>>().p(this).c(List.class).var("userRealmRoles").o(userRealmRoles);
 
-	/**	<br/>L'entité « userRealmRoles »
-	 * Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userRealmRoles">Trouver l'entité userRealmRoles dans Solr</a>
+	/**	<br/> The entity userRealmRoles
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userRealmRoles">Find the entity userRealmRoles in Solr</a>
 	 * <br/>
-	 * @param userRealmRoles est l'entité déjà construit. 
+	 * @param userRealmRoles is the entity already constructed. 
 	 **/
 	protected abstract void _userRealmRoles(List<String> o);
 
@@ -1082,6 +1235,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setUserRealmRoles(List<String> userRealmRoles) {
 		this.userRealmRoles = userRealmRoles;
 		this.userRealmRolesWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserRealmRoles(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	public SiteRequestEnUS addUserRealmRoles(String...objets) {
 		for(String o : objets) {
@@ -1094,13 +1250,12 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			this.userRealmRoles.add(o);
 		return (SiteRequestEnUS)this;
 	}
-	public SiteRequestEnUS setUserRealmRoles(JsonArray objets) {
+	public void setUserRealmRoles(JsonArray objets) {
 		userRealmRoles.clear();
 		for(int i = 0; i < objets.size(); i++) {
 			String o = objets.getString(i);
 			addUserRealmRoles(o);
 		}
-		return (SiteRequestEnUS)this;
 	}
 	protected SiteRequestEnUS userRealmRolesInit() {
 		if(!userRealmRolesWrap.alreadyInitialized) {
@@ -1110,8 +1265,24 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserRealmRoles(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserRealmRoles(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserRealmRoles(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserRealmRoles(siteRequest_, SiteRequestEnUS.staticSolrUserRealmRoles(siteRequest_, SiteRequestEnUS.staticSetUserRealmRoles(siteRequest_, o)));
+	}
+
 	public List<String> solrUserRealmRoles() {
-		return userRealmRoles;
+		List<String> l = new ArrayList<String>();
+		for(String o : userRealmRoles) {
+			l.add(SiteRequestEnUS.staticSolrUserRealmRoles(siteRequest_, o));
+		}
+		return l;
 	}
 
 	public String strUserRealmRoles() {
@@ -1138,7 +1309,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userResource //
 	//////////////////
 
-	/**	L'entité « userResource »
+	/**	 The entity userResource
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1146,11 +1317,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<JsonObject> userResourceWrap = new Wrap<JsonObject>().p(this).c(JsonObject.class).var("userResource").o(userResource);
 
-	/**	<br/>L'entité « userResource »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResource">Trouver l'entité userResource dans Solr</a>
+	/**	<br/> The entity userResource
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResource">Find the entity userResource in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _userResource(Wrap<JsonObject> c);
 
@@ -1161,6 +1332,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setUserResource(JsonObject userResource) {
 		this.userResource = userResource;
 		this.userResourceWrap.alreadyInitialized = true;
+	}
+	public static JsonObject staticSetUserResource(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS userResourceInit() {
 		if(!userResourceWrap.alreadyInitialized) {
@@ -1176,7 +1350,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// userResourceRoles //
 	///////////////////////
 
-	/**	L'entité « userResourceRoles »
+	/**	 The entity userResourceRoles
 	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1184,11 +1358,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<List<String>> userResourceRolesWrap = new Wrap<List<String>>().p(this).c(List.class).var("userResourceRoles").o(userResourceRoles);
 
-	/**	<br/>L'entité « userResourceRoles »
-	 * Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResourceRoles">Trouver l'entité userResourceRoles dans Solr</a>
+	/**	<br/> The entity userResourceRoles
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userResourceRoles">Find the entity userResourceRoles in Solr</a>
 	 * <br/>
-	 * @param userResourceRoles est l'entité déjà construit. 
+	 * @param userResourceRoles is the entity already constructed. 
 	 **/
 	protected abstract void _userResourceRoles(List<String> o);
 
@@ -1199,6 +1373,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setUserResourceRoles(List<String> userResourceRoles) {
 		this.userResourceRoles = userResourceRoles;
 		this.userResourceRolesWrap.alreadyInitialized = true;
+	}
+	public static String staticSetUserResourceRoles(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	public SiteRequestEnUS addUserResourceRoles(String...objets) {
 		for(String o : objets) {
@@ -1211,13 +1388,12 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 			this.userResourceRoles.add(o);
 		return (SiteRequestEnUS)this;
 	}
-	public SiteRequestEnUS setUserResourceRoles(JsonArray objets) {
+	public void setUserResourceRoles(JsonArray objets) {
 		userResourceRoles.clear();
 		for(int i = 0; i < objets.size(); i++) {
 			String o = objets.getString(i);
 			addUserResourceRoles(o);
 		}
-		return (SiteRequestEnUS)this;
 	}
 	protected SiteRequestEnUS userResourceRolesInit() {
 		if(!userResourceRolesWrap.alreadyInitialized) {
@@ -1227,8 +1403,24 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static String staticSolrUserResourceRoles(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrUserResourceRoles(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqUserResourceRoles(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrUserResourceRoles(siteRequest_, SiteRequestEnUS.staticSolrUserResourceRoles(siteRequest_, SiteRequestEnUS.staticSetUserResourceRoles(siteRequest_, o)));
+	}
+
 	public List<String> solrUserResourceRoles() {
-		return userResourceRoles;
+		List<String> l = new ArrayList<String>();
+		for(String o : userResourceRoles) {
+			l.add(SiteRequestEnUS.staticSolrUserResourceRoles(siteRequest_, o));
+		}
+		return l;
 	}
 
 	public String strUserResourceRoles() {
@@ -1255,7 +1447,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// siteUser //
 	//////////////
 
-	/**	L'entité « siteUser »
+	/**	 The entity siteUser
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1263,11 +1455,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SiteUser> siteUserWrap = new Wrap<SiteUser>().p(this).c(SiteUser.class).var("siteUser").o(siteUser);
 
-	/**	<br/>L'entité « siteUser »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteUser">Trouver l'entité siteUser dans Solr</a>
+	/**	<br/> The entity siteUser
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteUser">Find the entity siteUser in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteUser(Wrap<SiteUser> c);
 
@@ -1278,6 +1470,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSiteUser(SiteUser siteUser) {
 		this.siteUser = siteUser;
 		this.siteUserWrap.alreadyInitialized = true;
+	}
+	public static SiteUser staticSetSiteUser(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS siteUserInit() {
 		if(!siteUserWrap.alreadyInitialized) {
@@ -1295,7 +1490,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// xmlStack //
 	//////////////
 
-	/**	L'entité « xmlStack »
+	/**	 The entity xmlStack
 	 *	Il est construit avant d'être initialisé avec le constructeur par défaut Stack<String>(). 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1303,11 +1498,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Stack<String>> xmlStackWrap = new Wrap<Stack<String>>().p(this).c(Stack.class).var("xmlStack").o(xmlStack);
 
-	/**	<br/>L'entité « xmlStack »
-	 * Il est construit avant d'être initialisé avec le constructeur par défaut Stack<String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:xmlStack">Trouver l'entité xmlStack dans Solr</a>
+	/**	<br/> The entity xmlStack
+	 *  It is constructed before being initialized with the constructor by default Stack<String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:xmlStack">Find the entity xmlStack in Solr</a>
 	 * <br/>
-	 * @param xmlStack est l'entité déjà construit. 
+	 * @param xmlStack is the entity already constructed. 
 	 **/
 	protected abstract void _xmlStack(Stack<String> o);
 
@@ -1318,6 +1513,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setXmlStack(Stack<String> xmlStack) {
 		this.xmlStack = xmlStack;
 		this.xmlStackWrap.alreadyInitialized = true;
+	}
+	public static Stack<String> staticSetXmlStack(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS xmlStackInit() {
 		if(!xmlStackWrap.alreadyInitialized) {
@@ -1331,7 +1529,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// solrDocument //
 	//////////////////
 
-	/**	L'entité « solrDocument »
+	/**	 The entity solrDocument
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1339,11 +1537,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().p(this).c(SolrDocument.class).var("solrDocument").o(solrDocument);
 
-	/**	<br/>L'entité « solrDocument »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocument">Trouver l'entité solrDocument dans Solr</a>
+	/**	<br/> The entity solrDocument
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:solrDocument">Find the entity solrDocument in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _solrDocument(Wrap<SolrDocument> c);
 
@@ -1354,6 +1552,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSolrDocument(SolrDocument solrDocument) {
 		this.solrDocument = solrDocument;
 		this.solrDocumentWrap.alreadyInitialized = true;
+	}
+	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS solrDocumentInit() {
 		if(!solrDocumentWrap.alreadyInitialized) {
@@ -1369,7 +1570,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// pageAdmin //
 	///////////////
 
-	/**	L'entité « pageAdmin »
+	/**	 The entity pageAdmin
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1377,11 +1578,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Boolean> pageAdminWrap = new Wrap<Boolean>().p(this).c(Boolean.class).var("pageAdmin").o(pageAdmin);
 
-	/**	<br/>L'entité « pageAdmin »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageAdmin">Trouver l'entité pageAdmin dans Solr</a>
+	/**	<br/> The entity pageAdmin
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageAdmin">Find the entity pageAdmin in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _pageAdmin(Wrap<Boolean> c);
 
@@ -1393,10 +1594,12 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		this.pageAdmin = pageAdmin;
 		this.pageAdminWrap.alreadyInitialized = true;
 	}
-	public SiteRequestEnUS setPageAdmin(String o) {
-		this.pageAdmin = Boolean.parseBoolean(o);
+	public void setPageAdmin(String o) {
+		this.pageAdmin = SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
 		this.pageAdminWrap.alreadyInitialized = true;
-		return (SiteRequestEnUS)this;
+	}
+	public static Boolean staticSetPageAdmin(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
 	}
 	protected SiteRequestEnUS pageAdminInit() {
 		if(!pageAdminWrap.alreadyInitialized) {
@@ -1408,8 +1611,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static Boolean staticSolrPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSolrStrPageAdmin(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqPageAdmin(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrPageAdmin(siteRequest_, SiteRequestEnUS.staticSolrPageAdmin(siteRequest_, SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o)));
+	}
+
 	public Boolean solrPageAdmin() {
-		return pageAdmin;
+		return SiteRequestEnUS.staticSolrPageAdmin(siteRequest_, pageAdmin);
 	}
 
 	public String strPageAdmin() {
@@ -1436,7 +1651,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// requestPk //
 	///////////////
 
-	/**	L'entité « requestPk »
+	/**	 The entity requestPk
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonSerialize(using = ToStringSerializer.class)
@@ -1445,11 +1660,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Long> requestPkWrap = new Wrap<Long>().p(this).c(Long.class).var("requestPk").o(requestPk);
 
-	/**	<br/>L'entité « requestPk »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestPk">Trouver l'entité requestPk dans Solr</a>
+	/**	<br/> The entity requestPk
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestPk">Find the entity requestPk in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _requestPk(Wrap<Long> c);
 
@@ -1461,11 +1676,14 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		this.requestPk = requestPk;
 		this.requestPkWrap.alreadyInitialized = true;
 	}
-	public SiteRequestEnUS setRequestPk(String o) {
-		if(NumberUtils.isParsable(o))
-			this.requestPk = Long.parseLong(o);
+	public void setRequestPk(String o) {
+		this.requestPk = SiteRequestEnUS.staticSetRequestPk(siteRequest_, o);
 		this.requestPkWrap.alreadyInitialized = true;
-		return (SiteRequestEnUS)this;
+	}
+	public static Long staticSetRequestPk(SiteRequestEnUS siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Long.parseLong(o);
+		return null;
 	}
 	protected SiteRequestEnUS requestPkInit() {
 		if(!requestPkWrap.alreadyInitialized) {
@@ -1477,8 +1695,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 
+	public static Long staticSolrRequestPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o;
+	}
+
+	public static String staticSolrStrRequestPk(SiteRequestEnUS siteRequest_, Long o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqRequestPk(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrRequestPk(siteRequest_, SiteRequestEnUS.staticSolrRequestPk(siteRequest_, SiteRequestEnUS.staticSetRequestPk(siteRequest_, o)));
+	}
+
 	public Long solrRequestPk() {
-		return requestPk;
+		return SiteRequestEnUS.staticSolrRequestPk(siteRequest_, requestPk);
 	}
 
 	public String strRequestPk() {
@@ -1501,11 +1731,163 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return requestPk == null ? "" : StringEscapeUtils.escapeHtml4(strRequestPk());
 	}
 
+	////////////////
+	// requestUri //
+	////////////////
+
+	/**	 The entity requestUri
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected String requestUri;
+	@JsonIgnore
+	public Wrap<String> requestUriWrap = new Wrap<String>().p(this).c(String.class).var("requestUri").o(requestUri);
+
+	/**	<br/> The entity requestUri
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestUri">Find the entity requestUri in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _requestUri(Wrap<String> c);
+
+	public String getRequestUri() {
+		return requestUri;
+	}
+	public void setRequestUri(String o) {
+		this.requestUri = SiteRequestEnUS.staticSetRequestUri(siteRequest_, o);
+		this.requestUriWrap.alreadyInitialized = true;
+	}
+	public static String staticSetRequestUri(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected SiteRequestEnUS requestUriInit() {
+		if(!requestUriWrap.alreadyInitialized) {
+			_requestUri(requestUriWrap);
+			if(requestUri == null)
+				setRequestUri(requestUriWrap.o);
+		}
+		requestUriWrap.alreadyInitialized(true);
+		return (SiteRequestEnUS)this;
+	}
+
+	public static String staticSolrRequestUri(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrRequestUri(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqRequestUri(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrRequestUri(siteRequest_, SiteRequestEnUS.staticSolrRequestUri(siteRequest_, SiteRequestEnUS.staticSetRequestUri(siteRequest_, o)));
+	}
+
+	public String solrRequestUri() {
+		return SiteRequestEnUS.staticSolrRequestUri(siteRequest_, requestUri);
+	}
+
+	public String strRequestUri() {
+		return requestUri == null ? "" : requestUri;
+	}
+
+	public String jsonRequestUri() {
+		return requestUri == null ? "" : requestUri;
+	}
+
+	public String nomAffichageRequestUri() {
+		return null;
+	}
+
+	public String htmTooltipRequestUri() {
+		return null;
+	}
+
+	public String htmRequestUri() {
+		return requestUri == null ? "" : StringEscapeUtils.escapeHtml4(strRequestUri());
+	}
+
+	///////////////////
+	// requestMethod //
+	///////////////////
+
+	/**	 The entity requestMethod
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected String requestMethod;
+	@JsonIgnore
+	public Wrap<String> requestMethodWrap = new Wrap<String>().p(this).c(String.class).var("requestMethod").o(requestMethod);
+
+	/**	<br/> The entity requestMethod
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestMethod">Find the entity requestMethod in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _requestMethod(Wrap<String> c);
+
+	public String getRequestMethod() {
+		return requestMethod;
+	}
+	public void setRequestMethod(String o) {
+		this.requestMethod = SiteRequestEnUS.staticSetRequestMethod(siteRequest_, o);
+		this.requestMethodWrap.alreadyInitialized = true;
+	}
+	public static String staticSetRequestMethod(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected SiteRequestEnUS requestMethodInit() {
+		if(!requestMethodWrap.alreadyInitialized) {
+			_requestMethod(requestMethodWrap);
+			if(requestMethod == null)
+				setRequestMethod(requestMethodWrap.o);
+		}
+		requestMethodWrap.alreadyInitialized(true);
+		return (SiteRequestEnUS)this;
+	}
+
+	public static String staticSolrRequestMethod(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrRequestMethod(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqRequestMethod(SiteRequestEnUS siteRequest_, String o) {
+		return SiteRequestEnUS.staticSolrStrRequestMethod(siteRequest_, SiteRequestEnUS.staticSolrRequestMethod(siteRequest_, SiteRequestEnUS.staticSetRequestMethod(siteRequest_, o)));
+	}
+
+	public String solrRequestMethod() {
+		return SiteRequestEnUS.staticSolrRequestMethod(siteRequest_, requestMethod);
+	}
+
+	public String strRequestMethod() {
+		return requestMethod == null ? "" : requestMethod;
+	}
+
+	public String jsonRequestMethod() {
+		return requestMethod == null ? "" : requestMethod;
+	}
+
+	public String nomAffichageRequestMethod() {
+		return null;
+	}
+
+	public String htmTooltipRequestMethod() {
+		return null;
+	}
+
+	public String htmRequestMethod() {
+		return requestMethod == null ? "" : StringEscapeUtils.escapeHtml4(strRequestMethod());
+	}
+
 	////////
 	// tx //
 	////////
 
-	/**	L'entité « tx »
+	/**	 The entity tx
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1513,11 +1895,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Transaction> txWrap = new Wrap<Transaction>().p(this).c(Transaction.class).var("tx").o(tx);
 
-	/**	<br/>L'entité « tx »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tx">Trouver l'entité tx dans Solr</a>
+	/**	<br/> The entity tx
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tx">Find the entity tx in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _tx(Wrap<Transaction> c);
 
@@ -1528,6 +1910,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setTx(Transaction tx) {
 		this.tx = tx;
 		this.txWrap.alreadyInitialized = true;
+	}
+	public static Transaction staticSetTx(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS txInit() {
 		if(!txWrap.alreadyInitialized) {
@@ -1543,7 +1928,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// sqlConnection //
 	///////////////////
 
-	/**	L'entité « sqlConnection »
+	/**	 The entity sqlConnection
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1551,11 +1936,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SqlConnection> sqlConnectionWrap = new Wrap<SqlConnection>().p(this).c(SqlConnection.class).var("sqlConnection").o(sqlConnection);
 
-	/**	<br/>L'entité « sqlConnection »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sqlConnection">Trouver l'entité sqlConnection dans Solr</a>
+	/**	<br/> The entity sqlConnection
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sqlConnection">Find the entity sqlConnection in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _sqlConnection(Wrap<SqlConnection> c);
 
@@ -1566,6 +1951,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setSqlConnection(SqlConnection sqlConnection) {
 		this.sqlConnection = sqlConnection;
 		this.sqlConnectionWrap.alreadyInitialized = true;
+	}
+	public static SqlConnection staticSetSqlConnection(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS sqlConnectionInit() {
 		if(!sqlConnectionWrap.alreadyInitialized) {
@@ -1581,7 +1969,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// requestHeaders //
 	////////////////////
 
-	/**	L'entité « requestHeaders »
+	/**	 The entity requestHeaders
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1589,11 +1977,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<CaseInsensitiveHeaders> requestHeadersWrap = new Wrap<CaseInsensitiveHeaders>().p(this).c(CaseInsensitiveHeaders.class).var("requestHeaders").o(requestHeaders);
 
-	/**	<br/>L'entité « requestHeaders »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestHeaders">Trouver l'entité requestHeaders dans Solr</a>
+	/**	<br/> The entity requestHeaders
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestHeaders">Find the entity requestHeaders in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _requestHeaders(Wrap<CaseInsensitiveHeaders> c);
 
@@ -1604,6 +1992,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setRequestHeaders(CaseInsensitiveHeaders requestHeaders) {
 		this.requestHeaders = requestHeaders;
 		this.requestHeadersWrap.alreadyInitialized = true;
+	}
+	public static CaseInsensitiveHeaders staticSetRequestHeaders(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS requestHeadersInit() {
 		if(!requestHeadersWrap.alreadyInitialized) {
@@ -1619,7 +2010,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// requestVars //
 	/////////////////
 
-	/**	L'entité « requestVars »
+	/**	 The entity requestVars
 	 *	Il est construit avant d'être initialisé avec le constructeur par défaut Map<String, String>(). 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -1627,11 +2018,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Map<String, String>> requestVarsWrap = new Wrap<Map<String, String>>().p(this).c(Map.class).var("requestVars").o(requestVars);
 
-	/**	<br/>L'entité « requestVars »
-	 * Il est construit avant d'être initialisé avec le constructeur par défaut Map<String, String>(). 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestVars">Trouver l'entité requestVars dans Solr</a>
+	/**	<br/> The entity requestVars
+	 *  It is constructed before being initialized with the constructor by default Map<String, String>(). 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:requestVars">Find the entity requestVars in Solr</a>
 	 * <br/>
-	 * @param requestVars est l'entité déjà construit. 
+	 * @param requestVars is the entity already constructed. 
 	 **/
 	protected abstract void _requestVars(Map<String, String> m);
 
@@ -1642,6 +2033,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public void setRequestVars(Map<String, String> requestVars) {
 		this.requestVars = requestVars;
 		this.requestVarsWrap.alreadyInitialized = true;
+	}
+	public static Map<String, String> staticSetRequestVars(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected SiteRequestEnUS requestVarsInit() {
 		if(!requestVarsWrap.alreadyInitialized) {
@@ -1700,6 +2094,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		solrDocumentInit();
 		pageAdminInit();
 		requestPkInit();
+		requestUriInit();
+		requestMethodInit();
 		txInit();
 		sqlConnectionInit();
 		requestHeadersInit();
@@ -1803,6 +2199,10 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 				return oSiteRequestEnUS.pageAdmin;
 			case "requestPk":
 				return oSiteRequestEnUS.requestPk;
+			case "requestUri":
+				return oSiteRequestEnUS.requestUri;
+			case "requestMethod":
+				return oSiteRequestEnUS.requestMethod;
 			case "tx":
 				return oSiteRequestEnUS.tx;
 			case "sqlConnection":
@@ -1836,6 +2236,174 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	public Object attributeSiteRequestEnUS(String var, Object val) {
 		SiteRequestEnUS oSiteRequestEnUS = (SiteRequestEnUS)this;
 		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	///////////////
+	// staticSet //
+	///////////////
+
+	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSetSiteRequestEnUS(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSetSiteRequestEnUS(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+		case "userId":
+			return SiteRequestEnUS.staticSetUserId(siteRequest_, o);
+		case "userKey":
+			return SiteRequestEnUS.staticSetUserKey(siteRequest_, o);
+		case "sessionId":
+			return SiteRequestEnUS.staticSetSessionId(siteRequest_, o);
+		case "sessionIdBefore":
+			return SiteRequestEnUS.staticSetSessionIdBefore(siteRequest_, o);
+		case "userName":
+			return SiteRequestEnUS.staticSetUserName(siteRequest_, o);
+		case "userLastName":
+			return SiteRequestEnUS.staticSetUserLastName(siteRequest_, o);
+		case "userFirstName":
+			return SiteRequestEnUS.staticSetUserFirstName(siteRequest_, o);
+		case "userFullName":
+			return SiteRequestEnUS.staticSetUserFullName(siteRequest_, o);
+		case "userRealmRoles":
+			return SiteRequestEnUS.staticSetUserRealmRoles(siteRequest_, o);
+		case "userResourceRoles":
+			return SiteRequestEnUS.staticSetUserResourceRoles(siteRequest_, o);
+		case "pageAdmin":
+			return SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
+		case "requestPk":
+			return SiteRequestEnUS.staticSetRequestPk(siteRequest_, o);
+		case "requestUri":
+			return SiteRequestEnUS.staticSetRequestUri(siteRequest_, o);
+		case "requestMethod":
+			return SiteRequestEnUS.staticSetRequestMethod(siteRequest_, o);
+			default:
+				return null;
+		}
+	}
+
+	////////////////
+	// staticSolr //
+	////////////////
+
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrSiteRequestEnUS(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSolrSiteRequestEnUS(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+		case "userId":
+			return SiteRequestEnUS.staticSolrUserId(siteRequest_, (String)o);
+		case "userKey":
+			return SiteRequestEnUS.staticSolrUserKey(siteRequest_, (Long)o);
+		case "sessionId":
+			return SiteRequestEnUS.staticSolrSessionId(siteRequest_, (String)o);
+		case "sessionIdBefore":
+			return SiteRequestEnUS.staticSolrSessionIdBefore(siteRequest_, (String)o);
+		case "userName":
+			return SiteRequestEnUS.staticSolrUserName(siteRequest_, (String)o);
+		case "userLastName":
+			return SiteRequestEnUS.staticSolrUserLastName(siteRequest_, (String)o);
+		case "userFirstName":
+			return SiteRequestEnUS.staticSolrUserFirstName(siteRequest_, (String)o);
+		case "userFullName":
+			return SiteRequestEnUS.staticSolrUserFullName(siteRequest_, (String)o);
+		case "userRealmRoles":
+			return SiteRequestEnUS.staticSolrUserRealmRoles(siteRequest_, (String)o);
+		case "userResourceRoles":
+			return SiteRequestEnUS.staticSolrUserResourceRoles(siteRequest_, (String)o);
+		case "pageAdmin":
+			return SiteRequestEnUS.staticSolrPageAdmin(siteRequest_, (Boolean)o);
+		case "requestPk":
+			return SiteRequestEnUS.staticSolrRequestPk(siteRequest_, (Long)o);
+		case "requestUri":
+			return SiteRequestEnUS.staticSolrRequestUri(siteRequest_, (String)o);
+		case "requestMethod":
+			return SiteRequestEnUS.staticSolrRequestMethod(siteRequest_, (String)o);
+			default:
+				return null;
+		}
+	}
+
+	///////////////////
+	// staticSolrStr //
+	///////////////////
+
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrSiteRequestEnUS(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrStrSiteRequestEnUS(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+		case "userId":
+			return SiteRequestEnUS.staticSolrStrUserId(siteRequest_, (String)o);
+		case "userKey":
+			return SiteRequestEnUS.staticSolrStrUserKey(siteRequest_, (Long)o);
+		case "sessionId":
+			return SiteRequestEnUS.staticSolrStrSessionId(siteRequest_, (String)o);
+		case "sessionIdBefore":
+			return SiteRequestEnUS.staticSolrStrSessionIdBefore(siteRequest_, (String)o);
+		case "userName":
+			return SiteRequestEnUS.staticSolrStrUserName(siteRequest_, (String)o);
+		case "userLastName":
+			return SiteRequestEnUS.staticSolrStrUserLastName(siteRequest_, (String)o);
+		case "userFirstName":
+			return SiteRequestEnUS.staticSolrStrUserFirstName(siteRequest_, (String)o);
+		case "userFullName":
+			return SiteRequestEnUS.staticSolrStrUserFullName(siteRequest_, (String)o);
+		case "userRealmRoles":
+			return SiteRequestEnUS.staticSolrStrUserRealmRoles(siteRequest_, (String)o);
+		case "userResourceRoles":
+			return SiteRequestEnUS.staticSolrStrUserResourceRoles(siteRequest_, (String)o);
+		case "pageAdmin":
+			return SiteRequestEnUS.staticSolrStrPageAdmin(siteRequest_, (Boolean)o);
+		case "requestPk":
+			return SiteRequestEnUS.staticSolrStrRequestPk(siteRequest_, (Long)o);
+		case "requestUri":
+			return SiteRequestEnUS.staticSolrStrRequestUri(siteRequest_, (String)o);
+		case "requestMethod":
+			return SiteRequestEnUS.staticSolrStrRequestMethod(siteRequest_, (String)o);
+			default:
+				return null;
+		}
+	}
+
+	//////////////////
+	// staticSolrFq //
+	//////////////////
+
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqSiteRequestEnUS(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrFqSiteRequestEnUS(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+		case "userId":
+			return SiteRequestEnUS.staticSolrFqUserId(siteRequest_, o);
+		case "userKey":
+			return SiteRequestEnUS.staticSolrFqUserKey(siteRequest_, o);
+		case "sessionId":
+			return SiteRequestEnUS.staticSolrFqSessionId(siteRequest_, o);
+		case "sessionIdBefore":
+			return SiteRequestEnUS.staticSolrFqSessionIdBefore(siteRequest_, o);
+		case "userName":
+			return SiteRequestEnUS.staticSolrFqUserName(siteRequest_, o);
+		case "userLastName":
+			return SiteRequestEnUS.staticSolrFqUserLastName(siteRequest_, o);
+		case "userFirstName":
+			return SiteRequestEnUS.staticSolrFqUserFirstName(siteRequest_, o);
+		case "userFullName":
+			return SiteRequestEnUS.staticSolrFqUserFullName(siteRequest_, o);
+		case "userRealmRoles":
+			return SiteRequestEnUS.staticSolrFqUserRealmRoles(siteRequest_, o);
+		case "userResourceRoles":
+			return SiteRequestEnUS.staticSolrFqUserResourceRoles(siteRequest_, o);
+		case "pageAdmin":
+			return SiteRequestEnUS.staticSolrFqPageAdmin(siteRequest_, o);
+		case "requestPk":
+			return SiteRequestEnUS.staticSolrFqRequestPk(siteRequest_, o);
+		case "requestUri":
+			return SiteRequestEnUS.staticSolrFqRequestUri(siteRequest_, o);
+		case "requestMethod":
+			return SiteRequestEnUS.staticSolrFqRequestMethod(siteRequest_, o);
 			default:
 				return null;
 		}
