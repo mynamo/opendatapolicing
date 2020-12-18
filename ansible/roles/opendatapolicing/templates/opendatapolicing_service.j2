@@ -6,11 +6,11 @@ After=network.target
 Type=simple
 User={{USER_NAME}}
 Group={{USER_NAME}}
-WorkingDirectory={{OPENDATAPOLICING_SRC}}
-Environment=appName={{OPENDATAPOLICING_NAME}}
-Environment=appPath={{OPENDATAPOLICING_SRC}}
+WorkingDirectory={{PROJECT_SRC}}
+Environment=appName={{PROJECT_NAME}}
+Environment=appPath={{PROJECT_SRC}}
 Environment=appComputatePath={{COMPUTATE_SRC}}
-Environment=lang={{OPENDATAPOLICING_LANG}}
+Environment=lang={{PROJECT_LANG}}
 ExecStart={{COMPUTATE_SRC}}/bin/enUS/watch.sh
 LimitNOFILE=65000
 LimitNPROC=65000

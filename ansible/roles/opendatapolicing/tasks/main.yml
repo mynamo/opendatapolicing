@@ -1,141 +1,187 @@
-- name: Install {{OPENDATAPOLICING_NAME}} dependencies
-  connection: local
+- set_fact: 
+    PROJECT_SRC: "{{ playbook_dir | dirname }}"
+- stat: 
+    path: /usr/bin/git
+  register: GIT_EXISTS
+- name: Install git dependencies
   package:
-    name: [git,maven,java-latest-openjdk-devel,java-latest-openjdk]
+    name: [git]
   become: yes
-- name: Create the {{OPENDATAPOLICING_NAME}} source directory {{OPENDATAPOLICING_SRC}}
-  connection: local
+  when: GIT_EXISTS.stat.exists == false
+- stat: 
+    path: /usr/bin/javac
+  register: JAVAC_EXISTS
+- name: Install java dependencies
+  package:
+    name: [git,java-latest-openjdk-devel,java-latest-openjdk]
+  become: yes
+  when: JAVAC_EXISTS.stat.exists == false
+
+###############
+# Project dir #
+###############
+
+- name: Check for the {{PROJECT_NAME}} .git directory
+  stat:
+    path: "{{PROJECT_SRC}}/.git"
+  register: PROJECT_GIT_DIR
+- name: Create the {{PROJECT_NAME}} source directory {{PROJECT_SRC}}
   file:
-    name: "{{OPENDATAPOLICING_SRC}}"
+    name: "{{PROJECT_SRC}}"
     state: directory
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
-- name: Check for the {{OPENDATAPOLICING_NAME}} pom.xml
-  connection: local
-  stat:
-    path: "{{OPENDATAPOLICING_SRC}}/pom.xml"
-  register: pom_xml
-- name: Clone the {{OPENDATAPOLICING_NAME}} source code
-  connection: local
+  when: PROJECT_GIT_DIR.stat.exists == False
+- name: Clone the {{PROJECT_NAME}} source code
   git:
-    repo: "{{OPENDATAPOLICING_REPO}}"
-    dest: "{{OPENDATAPOLICING_SRC}}"
-  when: pom_xml.stat.exists == False
-- name: Create the {{OPENDATAPOLICING_NAME}}-static source directory {{OPENDATAPOLICING_SRC}}-static
-  connection: local
+    repo: "{{PROJECT_REPO}}"
+    dest: "{{PROJECT_SRC}}"
+  when: PROJECT_GIT_DIR.stat.exists == False
+
+##############
+# Static dir #
+##############
+
+- name: Check for the {{PROJECT_STATIC_NAME}} .git directory
+  stat:
+    path: "{{PROJECT_SRC}}-static/.git"
+  register: PROJECT_STATIC_GIT_DIR
+- name: Create the {{PROJECT_STATIC_NAME}} source directory {{PROJECT_SRC}}-static
   file:
-    name: "{{OPENDATAPOLICING_SRC}}-static"
+    name: "{{PROJECT_SRC}}-static"
     state: directory
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
-- name: Check for the {{OPENDATAPOLICING_NAME}}-static css dir
-  connection: local
-  stat:
-    path: "{{OPENDATAPOLICING_SRC}}-static/css"
-  register: static_css
-- name: Clone the {{OPENDATAPOLICING_NAME}}-static source code
-  connection: local
+  when: PROJECT_STATIC_GIT_DIR.stat.exists == False
+- name: Clone the {{PROJECT_STATIC_NAME}} source code
   git:
-    repo: "{{ OPENDATAPOLICING_REPO | replace('.git', '-static.git') }}"
-    dest: "{{ OPENDATAPOLICING_SRC }}-static"
-  when: static_css.stat.exists == False
-- name: Create the {{OPENDATAPOLICING_NAME}} systemd service {{OPENDATAPOLICING_SYSTEMD}}. 
-  connection: local
+    repo: "{{ PROJECT_STATIC_REPO }}"
+    dest: "{{ PROJECT_SRC }}-static"
+  when: PROJECT_STATIC_GIT_DIR.stat.exists == False
+
+###############
+# Ansible dir #
+###############
+
+- name: Check for the {{PROJECT_ANSIBLE_NAME}} .git directory
+  stat:
+    path: "{{PROJECT_SRC}}-ansible/.git"
+  register: PROJECT_ANSIBLE_GIT_DIR
+- name: Create the {{PROJECT_ANSIBLE_NAME}} source directory {{PROJECT_SRC}}-ansible
+  file:
+    name: "{{PROJECT_SRC}}-ansible"
+    state: directory
+    owner: "{{USER_NAME}}"
+    group: "{{USER_NAME}}"
+  become: yes
+  when: PROJECT_ANSIBLE_GIT_DIR.stat.exists == False
+- name: Clone the {{PROJECT_ANSIBLE_NAME}} source code
+  git:
+    repo: "{{ PROJECT_ANSIBLE_REPO }}"
+    dest: "{{ PROJECT_SRC }}-ansible"
+  when: PROJECT_ANSIBLE_GIT_DIR.stat.exists == False
+
+###########
+# Service #
+###########
+
+- name: Create the {{PROJECT_NAME}} systemd service {{PROJECT_SYSTEMD}}. 
   template:
     src: opendatapolicing_service.j2
-    dest: "{{OPENDATAPOLICING_SYSTEMD}}"
+    dest: "{{PROJECT_SYSTEMD}}"
   become: yes
-- name: Create the {{OPENDATAPOLICING_NAME}} config dir. 
-  connection: local
+- name: Create the {{PROJECT_NAME}} config dir. 
   file:
-    name: "{{OPENDATAPOLICING_SRC}}/config"
+    name: "{{PROJECT_SRC}}/config"
     state: directory
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
-- name: Create the {{OPENDATAPOLICING_NAME}} enUS config. 
-  connection: local
+- name: Create the {{PROJECT_NAME}} enUS config. 
   template:
     src: opendatapolicing_config_enUS.config.j2
-    dest: "{{OPENDATAPOLICING_SRC}}/config/opendatapolicing.config"
+    dest: "{{PROJECT_SRC}}/config/opendatapolicing.config"
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
 - name: Reload the services. 
-  connection: local
   systemd:
     daemon_reload: yes
   become: yes
-- name: Start and enable the {{OPENDATAPOLICING_NAME}} service. 
-  connection: local
+- name: Start and enable the {{PROJECT_NAME}} service. 
   service:
-    name: "{{OPENDATAPOLICING_SERVICE}}"
+    name: "{{PROJECT_SERVICE}}"
     enabled: yes
     state: restarted
   become: yes
+
+##############
+# PostgreSQL #
+##############
+
 - name: Create enUS database user
-  connection: local
   postgresql_user:
-    name: "{{OPENDATAPOLICING_DB_USER_ENUS}}"
-    password: "{{OPENDATAPOLICING_DB_PASSWORD_ENUS}}"
+    name: "{{PROJECT_DB_USER_ENUS}}"
+    password: "{{PROJECT_DB_PASSWORD_ENUS}}"
     login_unix_socket: /tmp
     login_user: "{{POSTGRES_BECOME_USER}}"
     db: postgres
   become: true
   become_user: "{{POSTGRES_BECOME_USER}}"
 - name: Create enUS database
-  connection: local
   postgresql_db:
-    name: "{{OPENDATAPOLICING_DB_NAME_ENUS}}"
-    owner: "{{OPENDATAPOLICING_DB_USER_ENUS}}"
+    name: "{{PROJECT_DB_NAME_ENUS}}"
+    owner: "{{PROJECT_DB_USER_ENUS}}"
     login_unix_socket: /tmp
     login_user: "{{POSTGRES_BECOME_USER}}"
     db: postgres
   become: true
   become_user: "{{POSTGRES_BECOME_USER}}"
 - name: Restart the postgresql service. 
-  connection: local
   service:
     name: "{{POSTGRES_SERVICE}}"
     state: restarted
   become: yes
+
+###############
+# Solr Search #
+###############
+
 - name: Check for existing solr collection enUS
-  connection: local
-  shell: "{{SOLR_OPT}}/server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:{{ZOOKEEPER_PORT}} -cmd ls /collections/{{OPENDATAPOLICING_SOLR_COLLECTION_ENUS}}"
+  shell: "{{SOLR_OPT}}/server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:{{ZOOKEEPER_PORT}} -cmd ls /collections/{{PROJECT_SOLR_COLLECTION_ENUS}}"
   ignore_errors: yes
   register: SOLR_COLLECTION_EXISTS_ENUS
   changed_when: false
 - name: Create collection in solr enUS
-  connection: local
-  shell: "{{SOLR_OPT}}/bin/solr create_collection -n computate -c {{OPENDATAPOLICING_SOLR_COLLECTION_ENUS}}"
+  shell: "{{SOLR_OPT}}/bin/solr create_collection -n computate -c {{PROJECT_SOLR_COLLECTION_ENUS}}"
   when: SOLR_COLLECTION_EXISTS_ENUS.rc != 0
+
+###########
+# SSL/TLS #
+###########
+
 - name: Create the keystore directory {{SSL_KEYSTORE_PATH}}
-  connection: local
   file:
     name: "{{SSL_KEYSTORE_PATH}}"
     state: directory
     owner: "{{USER_NAME}}"
     group: "{{USER_NAME}}"
   become: yes
-  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
-- name: Create the {{OPENDATAPOLICING_NAME}} keystore properties {{SSL_KEYSTORE_PATH}}/{{SSL_PROPERTIES_FILENAME}}
-  connection: local
+  when: PROJECT_SITE_BASE_URL_ENUS is regex("^https://")
+- name: Create the {{PROJECT_NAME}} keystore properties {{SSL_KEYSTORE_PATH}}/{{SSL_PROPERTIES_FILENAME}}
   template:
     src: opendatapolicing_keystore.properties.j2
-    dest: "{{SSL_KEYSTORE_PATH}}/{{OPENDATAPOLICING_SSL_PROPERTIES_FILENAME}}"
-  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
-- name: Create the {{OPENDATAPOLICING_NAME}} keystore jks {{SSL_JKS_PATH}}
-  connection: local
+    dest: "{{SSL_KEYSTORE_PATH}}/{{PROJECT_SSL_PROPERTIES_FILENAME}}"
+  when: PROJECT_SITE_BASE_URL_ENUS is regex("^https://")
+- name: Create the {{PROJECT_NAME}} keystore jks {{SSL_JKS_PATH}}
   shell: echo {{SSL_JKS_BASE64}} | base64 -d > {{SSL_JKS_PATH}}
-  when: OPENDATAPOLICING_SITE_BASE_URL_ENUS is regex("^https://")
+  when: PROJECT_SITE_BASE_URL_ENUS is regex("^https://")
 - name: Build the source code in /usr/local/src/computate
-  connection: local
   shell: "mvn clean install"
   args: 
     chdir: "/usr/local/src/computate"
-- name: Build the source code in {{OPENDATAPOLICING_SRC}}
-  connection: local
+- name: Build the source code in {{PROJECT_SRC}}
   shell: "mvn clean install"
   args: 
-    chdir: "{{OPENDATAPOLICING_SRC}}"
+    chdir: "{{PROJECT_SRC}}"

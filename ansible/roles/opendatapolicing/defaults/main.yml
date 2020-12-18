@@ -10,25 +10,33 @@ COMPUTATE_CERTBOT_DOMAIN_NAME: "..."
 #####################################
 
 # The name of this application. 
-OPENDATAPOLICING_NAME: opendatapolicing
+PROJECT_NAME: "..."
+# The name of this application. 
+GITHUB_ORG: "..."
 # The default source code directory for the computate application which helps generate and translate most the code. 
 COMPUTATE_SRC: "/usr/local/src/computate"
-# The default source code directory for the opendatapolicing project. 
-OPENDATAPOLICING_SRC: "/usr/local/src/{{OPENDATAPOLICING_NAME}}"
-# The default language of the opendatapolicing project code which is US English. 
-OPENDATAPOLICING_LANG: "enUS"
-# The default config file for the opendatapolicing project. 
-OPENDATAPOLICING_CONFIG: "{{OPENDATAPOLICING_SRC}}/config/{{OPENDATAPOLICING_NAME}}.config"
-# The US English config file for the opendatapolicing project. 
-OPENDATAPOLICING_CONFIG_enUS: "{{OPENDATAPOLICING_SRC}}/config/{{OPENDATAPOLICING_NAME}}-enUS.config"
-# The systemd service name for opendatapolicing that generates and translates most of the code. 
-OPENDATAPOLICING_SERVICE: "watch-{{OPENDATAPOLICING_NAME}}"
-# The systemd service file for opendatapolicing that generates and translates most of the code. 
-OPENDATAPOLICING_SYSTEMD: "/usr/lib/systemd/system/{{OPENDATAPOLICING_SERVICE}}.service"
-# The main git repository for the opendatapolicing project. 
-OPENDATAPOLICING_REPO: "git@github.com:computate/opendatapolicing.git"
-# The target ansible inventory group for the opendatapolicing project to setup your own hosts under this name to deploy the application to. 
-target: opendatapolicing
+# The default source code directory for the project. 
+PROJECT_SRC: "/usr/local/src/{{PROJECT_NAME}}"
+# The default language of the project code which is US English. 
+PROJECT_LANG: "enUS"
+# The default config file for the project. 
+PROJECT_CONFIG: "{{PROJECT_SRC}}/config/{{PROJECT_NAME}}.config"
+# The US English config file for the project. 
+PROJECT_CONFIG_enUS: "{{PROJECT_SRC}}/config/{{PROJECT_NAME}}-enUS.config"
+# The systemd service name for project that generates and translates most of the code. 
+PROJECT_SERVICE: "watch-{{PROJECT_NAME}}"
+# The systemd service file for project that generates and translates most of the code. 
+PROJECT_SYSTEMD: "/usr/lib/systemd/system/{{PROJECT_SERVICE}}.service"
+# The main git repository for the project. 
+PROJECT_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ PROJECT_NAME }}.git"
+# The name of this application. 
+PROJECT_STATIC_NAME: "{{ PROJECT_NAME }}-static"
+# The name of this application. 
+PROJECT_ANSIBLE_NAME: "{{ PROJECT_NAME }}-ansible"
+# The static files git repository for the project. 
+PROJECT_STATIC_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ PROJECT_STATIC_NAME }}.git"
+# The Ansible automation git repository for the project. 
+PROJECT_ANSIBLE_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ PROJECT_ANSIBLE_NAME }}.git"
 
 ######################
 # Zookeeper defaults #
@@ -68,42 +76,42 @@ POSTGRES_SERVICE: "postgresql"
 #####################################
 
 # The base URL where the static files will point to.  
-OPENDATAPOLICING_STATIC_BASE_URL: "https://example.neocities.org"
+PROJECT_STATIC_BASE_URL: "https://example.neocities.org"
 # The number of background worker executors that may run. 
-OPENDATAPOLICING_NUMBER_EXECUTORS: 5
+PROJECT_NUMBER_EXECUTORS: 5
 # The properties file where the SSL/TLS encryption is configured. 
-OPENDATAPOLICING_SSL_PROPERTIES_FILENAME: opendatapolicing-keystore.properties
+PROJECT_SSL_PROPERTIES_FILENAME: opendatapolicing-keystore.properties
 
 #################################################
 # opendatapolicing English in the US defaults #
 #################################################
 
 # The domain name of the site. 
-OPENDATAPOLICING_DOMAIN_NAME_ENUS: "example.com"
+PROJECT_DOMAIN_NAME_ENUS: "example.com"
 # The host name of the site. 
-OPENDATAPOLICING_SITE_HOST_NAME_ENUS: "opendatapolicing-dev.{{OPENDATAPOLICING_DOMAIN_NAME_ENUS}}"
+PROJECT_SITE_HOST_NAME_ENUS: "opendatapolicing-dev.{{PROJECT_DOMAIN_NAME_ENUS}}"
 # The port of the site. 
-OPENDATAPOLICING_SITE_PORT_ENUS: "10781"
+PROJECT_SITE_PORT_ENUS: "10781"
 # The base URL of the site. 
-OPENDATAPOLICING_SITE_BASE_URL_ENUS: "https://{{OPENDATAPOLICING_SITE_HOST_NAME_ENUS}}:{{OPENDATAPOLICING_SITE_PORT_ENUS}}"
+PROJECT_SITE_BASE_URL_ENUS: "http://localhost:{{PROJECT_SITE_PORT_ENUS}}"
 # The Solr collection of the site. 
-OPENDATAPOLICING_SOLR_COLLECTION_ENUS: "opendatapolicing"
+PROJECT_SOLR_COLLECTION_ENUS: "opendatapolicing"
 # The timezone of the site. 
-OPENDATAPOLICING_SITE_ZONE_ENUS: "America/Denver"
+PROJECT_SITE_ZONE_ENUS: "America/Denver"
 # The PostgreSQL database host name of the site. 
-OPENDATAPOLICING_DB_HOST_NAME_ENUS: "localhost"
+PROJECT_DB_HOST_NAME_ENUS: "localhost"
 # The PostgreSQL database user name of the site. 
-OPENDATAPOLICING_DB_USER_ENUS: computate
+PROJECT_DB_USER_ENUS: computate
 # The PostgreSQL database password of the site. 
-OPENDATAPOLICING_DB_PASSWORD_ENUS: "..."
+PROJECT_DB_PASSWORD_ENUS: "..."
 # The PostgreSQL database name of the site. 
-OPENDATAPOLICING_DB_NAME_ENUS: opendatapolicing
+PROJECT_DB_NAME_ENUS: opendatapolicing
 # The Java main class of the site. 
-OPENDATAPOLICING_JAVA_MAIN_CLASS_ENUS: com.opendatapolicing.enus.vertx.AppVertx
+PROJECT_JAVA_MAIN_CLASS_ENUS: com.opendatapolicing.enus.vertx.AppVertx
 # The backup directory of the site. 
-OPENDATAPOLICING_BACKUP_DIR_ENUS: /usr/local/src/opendatapolicing-static/data/enUS
+PROJECT_BACKUP_DIR_ENUS: /usr/local/src/opendatapolicing-static/data/enUS
 # The restore directory of the site. 
-OPENDATAPOLICING_RESTORE_DIR_ENUS: ~/backup/opendatapolicing-dev/enUS
+PROJECT_RESTORE_DIR_ENUS: ~/backup/opendatapolicing-dev/enUS
 
 #################
 # SMTP defaults #
@@ -141,11 +149,11 @@ AUTH_URL: https://sso.example.com/auth
 ####################
 
 # The keystore alias. 
-SSL_ALIAS: "{{OPENDATAPOLICING_DOMAIN_NAME_ENUS}}"
+SSL_ALIAS: "{{PROJECT_DOMAIN_NAME_ENUS}}"
 # The keystore directory. 
 SSL_KEYSTORE_PATH: /opt/keystore
 # The keystore properties filename. 
-SSL_PROPERTIES_FILENAME: "{{OPENDATAPOLICING_SSL_PROPERTIES_FILENAME}}"
+SSL_PROPERTIES_FILENAME: "{{PROJECT_SSL_PROPERTIES_FILENAME}}"
 # The keystore filename. 
 SSL_JKS_FILENAME: "{{SSL_ALIAS}}.jks"
 # The keystore path. 
@@ -172,16 +180,4 @@ SSL_JCEKS_BASE64: "..."
 ####################
 
 # Add to an ansible-vault the username of your user on your computer (echo $HOSTNAME). 
-USER_NAME: "..."
-# Add to an ansible-vault the password of your user on your computer to become root for configuring the applications. 
-USER_PASSWORD: "..."
-# Setup the ansible user when running the playbook as your user. 
-ansible_user: "{{USER_NAME}}"
-# Setup the ansible sudo password as your password when running the playbook. 
-ansible_sudo_pass: "{{USER_PASSWORD}}"
-# Setup the ansible password for elevated privileges as your password when running the playbook. 
-ansible_become_pass: "{{USER_PASSWORD}}"
-# Setup the ansible password for ssh as your password when running the playbook. 
-ansible_ssh_pass: "{{USER_PASSWORD}}"
-# Setup the decryption password for decrypting other secrets in the playbook. 
-VAULT_PASSWORD: "{{USER_PASSWORD}}"
+USER_NAME: "{{ lookup('env', 'USER') }}"

@@ -1,0 +1,39 @@
+---
+- name: Restore the southerncoalition page-design data
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: page-design, DATA_URI: /api/page-design }
+- name: Restore the southerncoalition html-part data
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: html-part, DATA_URI: /api/html-part }
+- name: Restore the southerncoalition page-design data again to resolve parent links
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: page-design, DATA_URI: /api/page-design }
+
+- name: Restore the southerncoalition state data
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: state, DATA_URI: /api/state }
+- name: Restore the southerncoalition agency data
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: agency, DATA_URI: /api/agency }
+- name: Restore the southerncoalition reportcard
+  hosts: "{{ target }}"
+  gather_facts: no
+  connection: local
+  roles:
+    - { role: southerncoalition_restore_enUS, DATA_NAME_VAR: reportcard, DATA_URI: /api/reportcard }
+

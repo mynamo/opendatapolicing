@@ -1,8 +1,0 @@
----
-- name: Install zookeeper as a service on the target. 
-  hosts: "{{ target }}"
-  vars_files: 
-    - "vaults/{{ VAULT_ID }}"
-  roles:
-    - opendatapolicing_zookeeper
-

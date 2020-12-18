@@ -1,8 +1,13 @@
 ---
 - name: Install the opendatapolicing source code and watch service on the target. 
-  hosts: "{{ target }}"
-  vars_files: 
-    - "vaults/{{ VAULT_ID }}"
+  hosts: localhost
+  vars: 
+    PROJECT_NAME: opendatapolicing
+    GITHUB_ORG: "{{ PROJECT_NAME }}"
+    PROJECT_REPO: "git@github.com:computate/{{ PROJECT_NAME }}.git"
   roles:
+    - project_postgres
+    - project_zookeeper
+    - project_solr
     - opendatapolicing
 
