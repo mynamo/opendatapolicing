@@ -711,7 +711,7 @@ public class SiteConfig extends SiteConfigGen<Object> implements Serializable {
 		if(config == null)
 			o = NumberUtils.toInt(System.getenv(c.var));
 		else
-			o = config.getInt(prefixEscaped + c.var);
+			o = config.getInt(prefixEscaped + c.var, 465);
 		c.o(o);
 	}
 

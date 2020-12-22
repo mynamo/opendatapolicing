@@ -1,0 +1,27 @@
+---
+- name: Install the opendatapolicing source code and watch service on the target. 
+  hosts: localhost
+  vars: 
+    PROJECT_NAME: opendatapolicing
+    GITHUB_ORG: "{{ PROJECT_NAME }}"
+    PROJECT_REPO: "git@github.com:{{ PROJECT_NAME }}/{{ PROJECT_NAME }}.git"
+    PROJECT_SRC: "{{ playbook_dir }}"
+  roles:
+#    - computate.computate_postgres
+#    - computate.computate_zookeeper
+#    - computate.computate_solr
+#    - role: computate.computate_project
+#      PROJECT_JAVA_PACKAGE: com.opendatapolicing.enus
+#      PROJECT_SERVICES: 
+#        - PROJECT_NAME: "{{ PROJECT_NAME }}-rp"
+#          PROJECT_SRC: "{{ playbook_dir }}/{{ PROJECT_NAME }}-rp"
+#          PROJECT_JAVA_PACKAGE: com.redhat.rhedar
+  tasks: 
+    - include_role:
+        name: computate.computate_project
+      vars: 
+        PROJECT_JAVA_PACKAGE: com.opendatapolicing.enus
+        PROJECT_SERVICES: 
+          - PROJECT_NAME: "{{ PROJECT_NAME }}"
+            PROJECT_SRC: "{{ playbook_dir }}/{{ PROJECT_NAME }}"
+            PROJECT_JAVA_PACKAGE: com.opendatapolicing.enus
