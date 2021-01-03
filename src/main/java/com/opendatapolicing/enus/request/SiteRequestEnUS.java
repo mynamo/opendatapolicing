@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.request;      
+package com.opendatapolicing.enus.request; 
 
 import java.io.IOException;
 import java.io.Serializable;

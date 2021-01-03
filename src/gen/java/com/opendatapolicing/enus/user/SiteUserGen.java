@@ -2295,17 +2295,6 @@ public abstract class SiteUserGen<DEV> extends Cluster {
 		super.storeCluster(solrDocument);
 	}
 
-	//////////////
-	// htmlBody //
-	//////////////
-
-	public void htmlBody() {
-		htmlBodySiteUser();
-	}
-
-	public void htmlBodySiteUser() {
-	}
-
 	//////////////////
 	// apiRequest //
 	//////////////////

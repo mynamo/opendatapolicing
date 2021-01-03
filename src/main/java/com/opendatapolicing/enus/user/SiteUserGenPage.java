@@ -413,9 +413,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 					htmlFormPageSiteUser(o);
 				}
 
-				if(o != null)
-					o.htmlBody();
-
 			} g("div");
 
 		}
