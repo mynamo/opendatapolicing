@@ -1,14 +1,15 @@
-package com.opendatapolicing.enus.cluster;      
+package com.opendatapolicing.enus.cluster;     
 
 import java.text.Normalizer;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-
 import com.opendatapolicing.enus.page.PageLayout;
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.opendatapolicing.enus.wrap.Wrap;
@@ -46,9 +47,13 @@ import com.opendatapolicing.enus.xml.UtilXml;
  * Role.frFR: SiteAdmin
  * Role.enUS: SiteAdmin
  * RoleRead.enUS: User
- */   
-public class Cluster extends ClusterGen<Object> {      
+ */  
+public class Cluster extends ClusterGen<Object> {       
 
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 */
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {}
 
 	/**
@@ -68,6 +73,7 @@ public class Cluster extends ClusterGen<Object> {
 	 * Indexed: true
 	 * Stored: true
 	 * InheritPrimaryKey: true
+	 * Define: true
 	 */
 	protected void _inheritPk(Wrap<Long> c) {}
 
@@ -105,7 +111,18 @@ public class Cluster extends ClusterGen<Object> {
 	 * HtmlCell: 4
 	 * DisplayName.enUS: modified
 	 */ 
-	protected void _modified(Wrap<ZonedDateTime> c) {}
+	protected void _modified(Wrap<ZonedDateTime> c) {
+		c.o(ZonedDateTime.now(ZoneId.of(siteRequest_.getSiteConfig_().getSiteZone())));
+	}
+
+	/**   
+	 * {@inheritDoc}
+	 * Stored: true
+	 */ 
+	protected void  _modifiedIsoOffsetDateTime(Wrap<String> c) {
+		if(modified != null)
+			c.o(modified.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -198,8 +215,9 @@ public class Cluster extends ClusterGen<Object> {
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
+	 * Saves: true
 	 */ 
-	protected void _saves(Wrap<List<String>> c) {
+	protected void _saves(List<String> l) {
 	}
 
 	/**
@@ -497,5 +515,27 @@ public class Cluster extends ClusterGen<Object> {
 		w.s(">");
 		
 		return this;
+	}
+
+	@Override public void htmPk(String classApiMethodMethod) {
+		Cluster s = (Cluster)this;
+		{ s.e("div").a("class", "w3-cell w3-cell-top w3-center w3-mobile ").f();
+			if("Page".equals(classApiMethodMethod)) {
+				{ s.e("div").a("class", "w3-padding ").f();
+					{ s.e("div").a("class", "w3-card ").f();
+						{ s.e("div").a("class", "w3-cell-row w3- ").f();
+							s.e("label").a("class", "").f().sx("primary key").g("label");
+						} s.g("div");
+						{ s.e("div").a("class", "w3-cell-row  ").f();
+							{ s.e("div").a("class", "w3-cell ").f();
+								{ s.e("div").a("class", "w3-rest ").f();
+									s.e("a").a("href", StringUtils.substringBeforeLast(pageUrlApi, "/"), "?fq=pk:", pk).a("class", "varCluster", pk, "Pk ").f().sx(strPk()).g("a");
+								} s.g("div");
+							} s.g("div");
+						} s.g("div");
+					} s.g("div");
+				} s.g("div");
+			}
+		} s.g("div");
 	}
 }

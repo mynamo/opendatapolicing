@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.request.api;
+package com.opendatapolicing.enus.request.api; 
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -13,6 +13,10 @@ import com.opendatapolicing.enus.wrap.Wrap;
  */
 public class ApiRequest extends ApiRequestGen<Object> {
 
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 */
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {}
 
 	protected void _created(Wrap<ZonedDateTime> c) {

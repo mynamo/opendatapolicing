@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.logging.Logger;
+import java.math.RoundingMode;
 import com.opendatapolicing.enus.wrap.Wrap;
 import java.math.MathContext;
 import com.opendatapolicing.enus.writer.AllWriter;
@@ -31,7 +32,7 @@ import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.vertx.AppVertx&fq=classeEtendGen_indexed_boolean:true">Trouver la classe  dans Solr</a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.vertx.AppVertx&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
 public abstract class AppVertxGen<DEV> extends AbstractVerticle {
@@ -149,6 +150,62 @@ public abstract class AppVertxGen<DEV> extends AbstractVerticle {
 	public Object attributeAppVertx(String var, Object val) {
 		AppVertx oAppVertx = (AppVertx)this;
 		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	///////////////
+	// staticSet //
+	///////////////
+
+	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSetAppVertx(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSetAppVertx(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+			default:
+				return null;
+		}
+	}
+
+	////////////////
+	// staticSolr //
+	////////////////
+
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrAppVertx(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSolrAppVertx(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+			default:
+				return null;
+		}
+	}
+
+	///////////////////
+	// staticSolrStr //
+	///////////////////
+
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrAppVertx(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrStrAppVertx(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+			default:
+				return null;
+		}
+	}
+
+	//////////////////
+	// staticSolrFq //
+	//////////////////
+
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqAppVertx(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrFqAppVertx(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
 			default:
 				return null;
 		}

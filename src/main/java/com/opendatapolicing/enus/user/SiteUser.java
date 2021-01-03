@@ -45,7 +45,7 @@ import com.opendatapolicing.enus.wrap.Wrap;
  * RoleUser: true
  * Role.frFR: SiteAdmin
  * Role.enUS: SiteAdmin
- */            
+ */           
 public class SiteUser extends SiteUserGen<Cluster> {   
 
 	/**
@@ -65,8 +65,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * DisplayName: user ID
 	 */
 	protected void _userId(Wrap<String> c) {
-		String o = siteRequest_.getUserId();
-		c.o(o);
 	}
 
 	/**
@@ -77,8 +75,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * DisplayName: user key
 	 */
 	protected void _userKey(Wrap<Long> c) {
-		Long o = siteRequest_.getUserKey();
-		c.o(o);
 	}
 
 	/**
@@ -88,8 +84,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * Define: true
 	 */
 	protected void _userName(Wrap<String> c) {
-		String o = siteRequest_.getUserName();
-		c.o(o);
 	}
 
 	/**
@@ -106,8 +100,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * Stored: true
 	 */
 	protected void _userFirstName(Wrap<String> c) {
-		String o = siteRequest_.getUserFirstName();
-		c.o(o);
 	}
 
 	/**
@@ -116,8 +108,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * Stored: true
 	 */
 	protected void _userLastName(Wrap<String> c) {
-		String o = siteRequest_.getUserLastName();
-		c.o(o);
 	}
 
 	/**
@@ -126,8 +116,6 @@ public class SiteUser extends SiteUserGen<Cluster> {
 	 * Stored: true
 	 */
 	protected void _userFullName(Wrap<String> c) {
-		String o = siteRequest_.getUserFullName();
-		c.o(o);
 	}
 
 	/**

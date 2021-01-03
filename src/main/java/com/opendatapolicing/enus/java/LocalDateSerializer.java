@@ -3,10 +3,11 @@ package com.opendatapolicing.enus.java;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import com.opendatapolicing.enus.page.PageLayout;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.opendatapolicing.enus.page.PageLayout;
 
 public class LocalDateSerializer extends JsonSerializer<LocalDate> {
 

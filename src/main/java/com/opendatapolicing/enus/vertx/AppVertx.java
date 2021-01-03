@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.vertx;
+package com.opendatapolicing.enus.vertx; 
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -25,9 +26,14 @@ import com.opendatapolicing.enus.user.SiteUserEnUSGenApiService;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
@@ -38,6 +44,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.JksOptions;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
+import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.ext.auth.oauth2.AccessToken;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
 import io.vertx.ext.auth.oauth2.OAuth2ClientOptions;
@@ -59,6 +66,7 @@ import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Transaction;
@@ -124,7 +132,82 @@ public class AppVertx extends AppVertxGen<AbstractVerticle> {
 	 *	The main method for the Vert.x application that runs the Vert.x Runner class
 	 **/
 	public static void  main(String[] args) {
-		RunnerVertx.run(AppVertx.class);
+		run();
+	}
+
+	public static void  run() {
+		Class<?> c = AppVertx.class;
+		JsonObject zkConfig = new JsonObject();
+		String zookeeperHostName = System.getenv("zookeeperHostName");
+		Integer zookeeperPort = Integer.parseInt(System.getenv("zookeeperPort"));
+		Integer clusterPort = System.getenv("clusterPort") == null ? null : Integer.parseInt(System.getenv("clusterPort"));
+		String clusterHost = System.getenv("clusterHost");
+		Integer clusterPublicPort = System.getenv("clusterPublicPort") == null ? null : Integer.parseInt(System.getenv("clusterPublicPort"));
+		Integer siteInstances = System.getenv("siteInstances") == null ? 1 : Integer.parseInt(System.getenv("siteInstances"));
+		String clusterPublicHost = System.getenv("clusterPublicHost");
+		String zookeeperHosts = zookeeperHostName + ":" + zookeeperPort;
+		zkConfig.put("zookeeperHosts", zookeeperHosts);
+		zkConfig.put("sessionTimeout", 20000);
+		zkConfig.put("connectTimeout", 3000);
+		zkConfig.put("rootPath", "io.vertx");
+		zkConfig.put("retry", new JsonObject() {
+			{
+				put("initialSleepTime", 100);
+				put("intervalTimes", 10000);
+				put("maxTimes", 3);
+			}
+		});
+		ClusterManager gestionnaireCluster = new ZookeeperClusterManager(zkConfig);
+		VertxOptions optionsVertx = new VertxOptions();
+		// For OpenShift
+		EventBusOptions eventBusOptions = new EventBusOptions();
+		String hostname = System.getenv("HOSTNAME");
+		String openshiftService = System.getenv("openshiftService");
+		if(clusterHost == null) {
+			clusterHost = hostname;
+		}
+		if(clusterPublicHost == null) {
+			if(hostname != null && openshiftService != null) {
+				clusterPublicHost = hostname + "." + openshiftService;
+			}
+		}
+		if(clusterHost != null) {
+			LOGGER.info(String.format("clusterHost: %s", clusterHost));
+			eventBusOptions.setHost(clusterHost);
+		}
+		if(clusterPort != null) {
+			LOGGER.info(String.format("clusterPort: %s", clusterPort));
+			eventBusOptions.setPort(clusterPort);
+		}
+		if(clusterPublicHost != null) {
+			LOGGER.info(String.format("clusterPublicHost: %s", clusterPublicHost));
+			eventBusOptions.setClusterPublicHost(clusterPublicHost);
+		}
+		if(clusterPublicPort != null) {
+			LOGGER.info(String.format("clusterPublicPort: %s", clusterPublicPort));
+			eventBusOptions.setClusterPublicPort(clusterPublicPort);
+		}
+		eventBusOptions.setClustered(true);
+		optionsVertx.setEventBusOptions(eventBusOptions);
+		optionsVertx.setClusterManager(gestionnaireCluster);
+		DeploymentOptions deploymentOptions = new DeploymentOptions();
+		deploymentOptions.setInstances(siteInstances);
+
+		String verticleID = c.getName();
+
+		Consumer<Vertx> runner = vertx -> {
+			vertx.deployVerticle(verticleID, deploymentOptions);
+		};
+		Vertx.clusteredVertx(optionsVertx, res -> {
+			if (res.succeeded()) {
+				Vertx vertx = res.result();
+				EventBus eventBus = vertx.eventBus();
+				LOGGER.info("We now have a clustered event bus: {}", eventBus);
+				runner.accept(vertx);
+			} else {
+				res.cause().printStackTrace();
+			}
+		});
 	}
 
 	/**	

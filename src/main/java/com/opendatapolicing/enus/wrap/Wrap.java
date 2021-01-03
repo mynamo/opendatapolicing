@@ -8,8 +8,6 @@ import java.util.ArrayList;
  */          
 public class Wrap<DEV> implements Serializable {
 
-	private static final long serialVersionUID = 4171725370071929571L;
-
 	public String var;
 
 	public Wrap<DEV> var(String o) {

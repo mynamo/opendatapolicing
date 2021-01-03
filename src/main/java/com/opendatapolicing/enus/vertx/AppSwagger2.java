@@ -14,7 +14,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-
 import com.opendatapolicing.enus.config.SiteConfig;
 import com.opendatapolicing.enus.context.SiteContextEnUS;
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
@@ -45,7 +44,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 	}
 
 	protected void _appName(Wrap<String> c) {
-		c.o("opendatapolicing");
+		c.o("southerncoalition");
 	}
 
 	protected void _languageName(Wrap<String> c) {
@@ -214,7 +213,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 //		  /callback:
 //		    get:
 //		      operationId: callback
-//		      x-vertx-event-bus: opendatapolicing-enUS-School
+//		      x-vertx-event-bus: southerncoalition-enUS-School
 //		      responses:
 //		        '200':
 //		          description: >+
@@ -225,7 +224,7 @@ public class AppSwagger2 extends AppSwagger2Gen<Object> {
 //		  /logout:
 //		    get:
 //		      operationId: logout
-//		      x-vertx-event-bus: opendatapolicing-enUS-School
+//		      x-vertx-event-bus: southerncoalition-enUS-School
 //		      responses:
 //		        '200':
 //		          description: >+

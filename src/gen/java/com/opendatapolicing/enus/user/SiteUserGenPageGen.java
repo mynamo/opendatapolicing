@@ -123,6 +123,13 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 		siteUser_Wrap.alreadyInitialized(true);
 		return (SiteUserGenPage)this;
 	}
+	public void htmlBodySiteUser_(SiteUser o) {
+	}
+	public void htmlBodySiteUser_() {
+		siteUser_.htmlAvant();
+		htmlBodySiteUser_(siteUser_);
+		siteUser_.htmlApres();
+	}
 
 	//////////////
 	// initDeep //
@@ -337,6 +344,8 @@ public abstract class SiteUserGenPageGen<DEV> extends PageLayout {
 	}
 
 	public void htmlBodySiteUserGenPage() {
+		if(siteUser_ != null)
+			siteUser_.htmlBody();
 	}
 
 	//////////

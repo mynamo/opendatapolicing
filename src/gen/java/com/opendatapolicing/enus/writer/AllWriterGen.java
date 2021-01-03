@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.lang.Boolean;
 import java.lang.String;
 import io.vertx.core.logging.Logger;
+import java.math.RoundingMode;
 import com.opendatapolicing.enus.wrap.Wrap;
 import java.io.PrintWriter;
 import java.math.MathContext;
@@ -37,7 +38,7 @@ import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true">Trouver la classe  dans Solr</a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
 public abstract class AllWriterGen<DEV> extends Object {
@@ -47,7 +48,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// siteRequest_ //
 	//////////////////
 
-	/**	L'entité « siteRequest_ »
+	/**	 The entity siteRequest_
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -55,11 +56,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().p(this).c(SiteRequestEnUS.class).var("siteRequest_").o(siteRequest_);
 
-	/**	<br/>L'entité « siteRequest_ »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Trouver l'entité siteRequest_ dans Solr</a>
+	/**	<br/> The entity siteRequest_
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _siteRequest_(Wrap<SiteRequestEnUS> c);
 
@@ -70,6 +71,9 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
 		this.siteRequest_Wrap.alreadyInitialized = true;
+	}
+	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected AllWriter siteRequest_Init() {
 		if(!siteRequest_Wrap.alreadyInitialized) {
@@ -85,7 +89,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// tabStr //
 	////////////
 
-	/**	L'entité « tabStr »
+	/**	 The entity tabStr
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -93,21 +97,23 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<String> tabStrWrap = new Wrap<String>().p(this).c(String.class).var("tabStr").o(tabStr);
 
-	/**	<br/>L'entité « tabStr »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tabStr">Trouver l'entité tabStr dans Solr</a>
+	/**	<br/> The entity tabStr
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:tabStr">Find the entity tabStr in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _tabStr(Wrap<String> c);
 
 	public String getTabStr() {
 		return tabStr;
 	}
-
-	public void setTabStr(String tabStr) {
-		this.tabStr = tabStr;
+	public void setTabStr(String o) {
+		this.tabStr = AllWriter.staticSetTabStr(siteRequest_, o);
 		this.tabStrWrap.alreadyInitialized = true;
+	}
+	public static String staticSetTabStr(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 	protected AllWriter tabStrInit() {
 		if(!tabStrWrap.alreadyInitialized) {
@@ -119,8 +125,20 @@ public abstract class AllWriterGen<DEV> extends Object {
 		return (AllWriter)this;
 	}
 
+	public static String staticSolrTabStr(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrTabStr(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqTabStr(SiteRequestEnUS siteRequest_, String o) {
+		return AllWriter.staticSolrStrTabStr(siteRequest_, AllWriter.staticSolrTabStr(siteRequest_, AllWriter.staticSetTabStr(siteRequest_, o)));
+	}
+
 	public String solrTabStr() {
-		return tabStr;
+		return AllWriter.staticSolrTabStr(siteRequest_, tabStr);
 	}
 
 	public String strTabStr() {
@@ -147,7 +165,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// file //
 	//////////
 
-	/**	L'entité « file »
+	/**	 The entity file
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -155,11 +173,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<File> fileWrap = new Wrap<File>().p(this).c(File.class).var("file").o(file);
 
-	/**	<br/>L'entité « file »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:file">Trouver l'entité file dans Solr</a>
+	/**	<br/> The entity file
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:file">Find the entity file in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _file(Wrap<File> c);
 
@@ -170,6 +188,9 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public void setFile(File file) {
 		this.file = file;
 		this.fileWrap.alreadyInitialized = true;
+	}
+	public static File staticSetFile(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected AllWriter fileInit() {
 		if(!fileWrap.alreadyInitialized) {
@@ -185,7 +206,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// stringWriter //
 	//////////////////
 
-	/**	L'entité « stringWriter »
+	/**	 The entity stringWriter
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -193,11 +214,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<StringWriter> stringWriterWrap = new Wrap<StringWriter>().p(this).c(StringWriter.class).var("stringWriter").o(stringWriter);
 
-	/**	<br/>L'entité « stringWriter »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:stringWriter">Trouver l'entité stringWriter dans Solr</a>
+	/**	<br/> The entity stringWriter
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:stringWriter">Find the entity stringWriter in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _stringWriter(Wrap<StringWriter> c);
 
@@ -208,6 +229,9 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public void setStringWriter(StringWriter stringWriter) {
 		this.stringWriter = stringWriter;
 		this.stringWriterWrap.alreadyInitialized = true;
+	}
+	public static StringWriter staticSetStringWriter(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected AllWriter stringWriterInit() {
 		if(!stringWriterWrap.alreadyInitialized) {
@@ -223,7 +247,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// buffer //
 	////////////
 
-	/**	L'entité « buffer »
+	/**	 The entity buffer
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -231,11 +255,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Buffer> bufferWrap = new Wrap<Buffer>().p(this).c(Buffer.class).var("buffer").o(buffer);
 
-	/**	<br/>L'entité « buffer »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:buffer">Trouver l'entité buffer dans Solr</a>
+	/**	<br/> The entity buffer
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:buffer">Find the entity buffer in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _buffer(Wrap<Buffer> c);
 
@@ -246,6 +270,9 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public void setBuffer(Buffer buffer) {
 		this.buffer = buffer;
 		this.bufferWrap.alreadyInitialized = true;
+	}
+	public static Buffer staticSetBuffer(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected AllWriter bufferInit() {
 		if(!bufferWrap.alreadyInitialized) {
@@ -261,7 +288,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// printWriter //
 	/////////////////
 
-	/**	L'entité « printWriter »
+	/**	 The entity printWriter
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -269,11 +296,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<PrintWriter> printWriterWrap = new Wrap<PrintWriter>().p(this).c(PrintWriter.class).var("printWriter").o(printWriter);
 
-	/**	<br/>L'entité « printWriter »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:printWriter">Trouver l'entité printWriter dans Solr</a>
+	/**	<br/> The entity printWriter
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:printWriter">Find the entity printWriter in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _printWriter(Wrap<PrintWriter> c);
 
@@ -284,6 +311,9 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public void setPrintWriter(PrintWriter printWriter) {
 		this.printWriter = printWriter;
 		this.printWriterWrap.alreadyInitialized = true;
+	}
+	public static PrintWriter staticSetPrintWriter(SiteRequestEnUS siteRequest_, String o) {
+		return null;
 	}
 	protected AllWriter printWriterInit() {
 		if(!printWriterWrap.alreadyInitialized) {
@@ -299,7 +329,7 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// empty //
 	///////////
 
-	/**	L'entité « empty »
+	/**	 The entity empty
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonInclude(Include.NON_NULL)
@@ -307,11 +337,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonIgnore
 	public Wrap<Boolean> emptyWrap = new Wrap<Boolean>().p(this).c(Boolean.class).var("empty").o(empty);
 
-	/**	<br/>L'entité « empty »
-	 *  est défini comme null avant d'être initialisé. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:empty">Trouver l'entité empty dans Solr</a>
+	/**	<br/> The entity empty
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.writer.AllWriter&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:empty">Find the entity empty in Solr</a>
 	 * <br/>
-	 * @param c est pour envelopper une valeur à assigner à cette entité lors de l'initialisation. 
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
 	protected abstract void _empty(Wrap<Boolean> c);
 
@@ -323,10 +353,12 @@ public abstract class AllWriterGen<DEV> extends Object {
 		this.empty = empty;
 		this.emptyWrap.alreadyInitialized = true;
 	}
-	public AllWriter setEmpty(String o) {
-		this.empty = Boolean.parseBoolean(o);
+	public void setEmpty(String o) {
+		this.empty = AllWriter.staticSetEmpty(siteRequest_, o);
 		this.emptyWrap.alreadyInitialized = true;
-		return (AllWriter)this;
+	}
+	public static Boolean staticSetEmpty(SiteRequestEnUS siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
 	}
 	protected AllWriter emptyInit() {
 		if(!emptyWrap.alreadyInitialized) {
@@ -338,8 +370,20 @@ public abstract class AllWriterGen<DEV> extends Object {
 		return (AllWriter)this;
 	}
 
+	public static Boolean staticSolrEmpty(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSolrStrEmpty(SiteRequestEnUS siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqEmpty(SiteRequestEnUS siteRequest_, String o) {
+		return AllWriter.staticSolrStrEmpty(siteRequest_, AllWriter.staticSolrEmpty(siteRequest_, AllWriter.staticSetEmpty(siteRequest_, o)));
+	}
+
 	public Boolean solrEmpty() {
-		return empty;
+		return AllWriter.staticSolrEmpty(siteRequest_, empty);
 	}
 
 	public String strEmpty() {
@@ -465,6 +509,78 @@ public abstract class AllWriterGen<DEV> extends Object {
 	public Object attributeAllWriter(String var, Object val) {
 		AllWriter oAllWriter = (AllWriter)this;
 		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	///////////////
+	// staticSet //
+	///////////////
+
+	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSetAllWriter(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSetAllWriter(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+		case "tabStr":
+			return AllWriter.staticSetTabStr(siteRequest_, o);
+		case "empty":
+			return AllWriter.staticSetEmpty(siteRequest_, o);
+			default:
+				return null;
+		}
+	}
+
+	////////////////
+	// staticSolr //
+	////////////////
+
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrAllWriter(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSolrAllWriter(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+		case "tabStr":
+			return AllWriter.staticSolrTabStr(siteRequest_, (String)o);
+		case "empty":
+			return AllWriter.staticSolrEmpty(siteRequest_, (Boolean)o);
+			default:
+				return null;
+		}
+	}
+
+	///////////////////
+	// staticSolrStr //
+	///////////////////
+
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrAllWriter(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrStrAllWriter(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+		case "tabStr":
+			return AllWriter.staticSolrStrTabStr(siteRequest_, (String)o);
+		case "empty":
+			return AllWriter.staticSolrStrEmpty(siteRequest_, (Boolean)o);
+			default:
+				return null;
+		}
+	}
+
+	//////////////////
+	// staticSolrFq //
+	//////////////////
+
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqAllWriter(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrFqAllWriter(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+		case "tabStr":
+			return AllWriter.staticSolrFqTabStr(siteRequest_, o);
+		case "empty":
+			return AllWriter.staticSolrFqEmpty(siteRequest_, o);
 			default:
 				return null;
 		}

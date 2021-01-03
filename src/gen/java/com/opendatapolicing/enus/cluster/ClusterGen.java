@@ -71,6 +71,7 @@ public abstract class ClusterGen<DEV> extends Object {
 	/**	 The entity siteRequest_
 	 *	 is defined as null before being initialized. 
 	 */
+	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
 	@JsonIgnore
@@ -298,6 +299,75 @@ public abstract class ClusterGen<DEV> extends Object {
 
 	public String htmInheritPk() {
 		return inheritPk == null ? "" : StringEscapeUtils.escapeHtml4(strInheritPk());
+	}
+
+	public void inputInheritPk(String classApiMethodMethod) {
+		Cluster s = (Cluster)this;
+		if(
+				CollectionUtils.containsAny(siteRequest_.getUserResourceRoles(), ROLES)
+				|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), ROLES)
+				) {
+			s.e("input")
+				.a("type", "text")
+				.a("id", classApiMethodMethod, "_inheritPk");
+				if("Page".equals(classApiMethodMethod) || "PATCH".equals(classApiMethodMethod)) {
+					s.a("class", "setInheritPk classCluster inputCluster", pk, "InheritPk w3-input w3-border ");
+					s.a("name", "setInheritPk");
+				} else {
+					s.a("class", "valueInheritPk w3-input w3-border classCluster inputCluster", pk, "InheritPk w3-input w3-border ");
+					s.a("name", "inheritPk");
+				}
+				if("Page".equals(classApiMethodMethod)) {
+					s.a("onclick", "removeGlow($(this)); ");
+					s.a("onchange", "patch", getClass().getSimpleName(), "Val([{ name: 'fq', value: 'pk:", pk, "' }], 'setInheritPk', $(this).val(), function() { addGlow($('#", classApiMethodMethod, "_inheritPk')); }, function() { addError($('#", classApiMethodMethod, "_inheritPk')); }); ");
+				}
+				s.a("value", strInheritPk())
+			.fg();
+
+		} else {
+			if(
+					CollectionUtils.containsAny(siteRequest_.getUserResourceRoles(), ROLES)
+					|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), ROLES)
+					|| CollectionUtils.containsAny(siteRequest_.getUserResourceRoles(), ROLE_READS)
+					|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), ROLE_READS)
+					) {
+				s.e("span").a("class", "varCluster", pk, "InheritPk ").f().sx(htmInheritPk()).g("span");
+			}
+		}
+	}
+
+	public void htmInheritPk(String classApiMethodMethod) {
+		Cluster s = (Cluster)this;
+		{ s.e("div").a("class", "w3-cell w3-cell-top w3-center w3-mobile ").f();
+			{ s.e("div").a("class", "w3-padding ").f();
+				{ s.e("div").a("id", "suggest", classApiMethodMethod, "ClusterInheritPk").f();
+					{ s.e("div").a("class", "w3-card ").f();
+						{ s.e("div").a("class", "w3-cell-row w3-padding ").f();
+							{ s.e("div").a("class", "w3-cell ").f();
+
+								inputInheritPk(classApiMethodMethod);
+							} s.g("div");
+							if(
+									CollectionUtils.containsAny(siteRequest_.getUserResourceRoles(), ROLES)
+									|| CollectionUtils.containsAny(siteRequest_.getUserRealmRoles(), ROLES)
+									) {
+								if("Page".equals(classApiMethodMethod)) {
+									{ s.e("div").a("class", "w3-cell w3-left-align w3-cell-top ").f();
+										{ s.e("button")
+											.a("tabindex", "-1")
+											.a("class", "w3-btn w3-round w3-border w3-border-black w3-ripple w3-padding w3-bar-item w3- ")
+										.a("onclick", "removeGlow($('#", classApiMethodMethod, "_inheritPk')); $('#", classApiMethodMethod, "_inheritPk').val(null); patch", getClass().getSimpleName(), "Val([{ name: 'fq', value: 'pk:' + $('#ClusterForm :input[name=pk]').val() }], 'setInheritPk', null, function() { addGlow($('#", classApiMethodMethod, "_inheritPk')); }, function() { addError($('#", classApiMethodMethod, "_inheritPk')); }); ")
+											.f();
+											s.e("i").a("class", "far fa-eraser ").f().g("i");
+										} s.g("button");
+									} s.g("div");
+								}
+							}
+						} s.g("div");
+					} s.g("div");
+				} s.g("div");
+			} s.g("div");
+		} s.g("div");
 	}
 
 	////////
@@ -606,6 +676,82 @@ public abstract class ClusterGen<DEV> extends Object {
 				} s.g("div");
 			} s.g("div");
 		} s.g("div");
+	}
+
+	///////////////////////////////
+	// modifiedIsoOffsetDateTime //
+	///////////////////////////////
+
+	/**	 The entity modifiedIsoOffsetDateTime
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonInclude(Include.NON_NULL)
+	protected String modifiedIsoOffsetDateTime;
+	@JsonIgnore
+	public Wrap<String> modifiedIsoOffsetDateTimeWrap = new Wrap<String>().p(this).c(String.class).var("modifiedIsoOffsetDateTime").o(modifiedIsoOffsetDateTime);
+
+	/**	<br/> The entity modifiedIsoOffsetDateTime
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.cluster.Cluster&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:modifiedIsoOffsetDateTime">Find the entity modifiedIsoOffsetDateTime in Solr</a>
+	 * <br/>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _modifiedIsoOffsetDateTime(Wrap<String> c);
+
+	public String getModifiedIsoOffsetDateTime() {
+		return modifiedIsoOffsetDateTime;
+	}
+	public void setModifiedIsoOffsetDateTime(String o) {
+		this.modifiedIsoOffsetDateTime = Cluster.staticSetModifiedIsoOffsetDateTime(siteRequest_, o);
+		this.modifiedIsoOffsetDateTimeWrap.alreadyInitialized = true;
+	}
+	public static String staticSetModifiedIsoOffsetDateTime(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected Cluster modifiedIsoOffsetDateTimeInit() {
+		if(!modifiedIsoOffsetDateTimeWrap.alreadyInitialized) {
+			_modifiedIsoOffsetDateTime(modifiedIsoOffsetDateTimeWrap);
+			if(modifiedIsoOffsetDateTime == null)
+				setModifiedIsoOffsetDateTime(modifiedIsoOffsetDateTimeWrap.o);
+		}
+		modifiedIsoOffsetDateTimeWrap.alreadyInitialized(true);
+		return (Cluster)this;
+	}
+
+	public static String staticSolrModifiedIsoOffsetDateTime(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrModifiedIsoOffsetDateTime(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqModifiedIsoOffsetDateTime(SiteRequestEnUS siteRequest_, String o) {
+		return Cluster.staticSolrStrModifiedIsoOffsetDateTime(siteRequest_, Cluster.staticSolrModifiedIsoOffsetDateTime(siteRequest_, Cluster.staticSetModifiedIsoOffsetDateTime(siteRequest_, o)));
+	}
+
+	public String solrModifiedIsoOffsetDateTime() {
+		return Cluster.staticSolrModifiedIsoOffsetDateTime(siteRequest_, modifiedIsoOffsetDateTime);
+	}
+
+	public String strModifiedIsoOffsetDateTime() {
+		return modifiedIsoOffsetDateTime == null ? "" : modifiedIsoOffsetDateTime;
+	}
+
+	public String jsonModifiedIsoOffsetDateTime() {
+		return modifiedIsoOffsetDateTime == null ? "" : modifiedIsoOffsetDateTime;
+	}
+
+	public String nomAffichageModifiedIsoOffsetDateTime() {
+		return null;
+	}
+
+	public String htmTooltipModifiedIsoOffsetDateTime() {
+		return null;
+	}
+
+	public String htmModifiedIsoOffsetDateTime() {
+		return modifiedIsoOffsetDateTime == null ? "" : StringEscapeUtils.escapeHtml4(strModifiedIsoOffsetDateTime());
 	}
 
 	//////////////
@@ -1446,20 +1592,20 @@ public abstract class ClusterGen<DEV> extends Object {
 	///////////
 
 	/**	 The entity saves
-	 *	 is defined as null before being initialized. 
+	 *	Il est construit avant d'être initialisé avec le constructeur par défaut List<String>(). 
 	 */
 	@JsonInclude(Include.NON_NULL)
-	protected List<String> saves;
+	protected List<String> saves = new ArrayList<String>();
 	@JsonIgnore
 	public Wrap<List<String>> savesWrap = new Wrap<List<String>>().p(this).c(List.class).var("saves").o(saves);
 
 	/**	<br/> The entity saves
-	 *  is defined as null before being initialized. 
+	 *  It is constructed before being initialized with the constructor by default List<String>(). 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.cluster.Cluster&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param saves is the entity already constructed. 
 	 **/
-	protected abstract void _saves(Wrap<List<String>> c);
+	protected abstract void _saves(List<String> l);
 
 	public List<String> getSaves() {
 		return saves;
@@ -1492,9 +1638,7 @@ public abstract class ClusterGen<DEV> extends Object {
 	}
 	protected Cluster savesInit() {
 		if(!savesWrap.alreadyInitialized) {
-			_saves(savesWrap);
-			if(saves == null)
-				setSaves(savesWrap.o);
+			_saves(saves);
 		}
 		savesWrap.alreadyInitialized(true);
 		return (Cluster)this;
@@ -2299,6 +2443,7 @@ public abstract class ClusterGen<DEV> extends Object {
 		idInit();
 		createdInit();
 		modifiedInit();
+		modifiedIsoOffsetDateTimeInit();
 		archivedInit();
 		deletedInit();
 		classCanonicalNameInit();
@@ -2366,6 +2511,8 @@ public abstract class ClusterGen<DEV> extends Object {
 				return oCluster.created;
 			case "modified":
 				return oCluster.modified;
+			case "modifiedIsoOffsetDateTime":
+				return oCluster.modifiedIsoOffsetDateTime;
 			case "archived":
 				return oCluster.archived;
 			case "deleted":
@@ -2451,6 +2598,8 @@ public abstract class ClusterGen<DEV> extends Object {
 			return Cluster.staticSetCreated(siteRequest_, o);
 		case "modified":
 			return Cluster.staticSetModified(siteRequest_, o);
+		case "modifiedIsoOffsetDateTime":
+			return Cluster.staticSetModifiedIsoOffsetDateTime(siteRequest_, o);
 		case "archived":
 			return Cluster.staticSetArchived(siteRequest_, o);
 		case "deleted":
@@ -2511,6 +2660,8 @@ public abstract class ClusterGen<DEV> extends Object {
 			return Cluster.staticSolrCreated(siteRequest_, (ZonedDateTime)o);
 		case "modified":
 			return Cluster.staticSolrModified(siteRequest_, (ZonedDateTime)o);
+		case "modifiedIsoOffsetDateTime":
+			return Cluster.staticSolrModifiedIsoOffsetDateTime(siteRequest_, (String)o);
 		case "archived":
 			return Cluster.staticSolrArchived(siteRequest_, (Boolean)o);
 		case "deleted":
@@ -2571,6 +2722,8 @@ public abstract class ClusterGen<DEV> extends Object {
 			return Cluster.staticSolrStrCreated(siteRequest_, (Date)o);
 		case "modified":
 			return Cluster.staticSolrStrModified(siteRequest_, (Date)o);
+		case "modifiedIsoOffsetDateTime":
+			return Cluster.staticSolrStrModifiedIsoOffsetDateTime(siteRequest_, (String)o);
 		case "archived":
 			return Cluster.staticSolrStrArchived(siteRequest_, (Boolean)o);
 		case "deleted":
@@ -2631,6 +2784,8 @@ public abstract class ClusterGen<DEV> extends Object {
 			return Cluster.staticSolrFqCreated(siteRequest_, o);
 		case "modified":
 			return Cluster.staticSolrFqModified(siteRequest_, o);
+		case "modifiedIsoOffsetDateTime":
+			return Cluster.staticSolrFqModifiedIsoOffsetDateTime(siteRequest_, o);
 		case "archived":
 			return Cluster.staticSolrFqArchived(siteRequest_, o);
 		case "deleted":
@@ -2693,6 +2848,11 @@ public abstract class ClusterGen<DEV> extends Object {
 	}
 	public Object defineCluster(String var, String val) {
 		switch(var) {
+			case "inheritPk":
+				if(val != null)
+					setInheritPk(val);
+				saves.add(var);
+				return val;
 			case "created":
 				if(val != null)
 					setCreated(val);
@@ -2764,6 +2924,12 @@ public abstract class ClusterGen<DEV> extends Object {
 					oCluster.setModified(modified);
 			}
 
+			if(saves.contains("modifiedIsoOffsetDateTime")) {
+				String modifiedIsoOffsetDateTime = (String)solrDocument.get("modifiedIsoOffsetDateTime_stored_string");
+				if(modifiedIsoOffsetDateTime != null)
+					oCluster.setModifiedIsoOffsetDateTime(modifiedIsoOffsetDateTime);
+			}
+
 			if(saves.contains("archived")) {
 				Boolean archived = (Boolean)solrDocument.get("archived_stored_boolean");
 				if(archived != null)
@@ -2815,7 +2981,7 @@ public abstract class ClusterGen<DEV> extends Object {
 			if(saves.contains("saves")) {
 				List<String> saves = (List<String>)solrDocument.get("saves_stored_strings");
 				if(saves != null)
-					oCluster.setSaves(saves);
+					oCluster.saves.addAll(saves);
 			}
 
 			if(saves.contains("objectTitle")) {
@@ -2930,6 +3096,9 @@ public abstract class ClusterGen<DEV> extends Object {
 		if(modified != null) {
 			document.addField("modified_indexed_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
 			document.addField("modified_stored_date", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(ZonedDateTime.ofInstant(modified.toInstant(), ZoneId.of("UTC"))));
+		}
+		if(modifiedIsoOffsetDateTime != null) {
+			document.addField("modifiedIsoOffsetDateTime_stored_string", modifiedIsoOffsetDateTime);
 		}
 		if(archived != null) {
 			document.addField("archived_indexed_boolean", archived);
@@ -3113,6 +3282,10 @@ public abstract class ClusterGen<DEV> extends Object {
 		if(modified != null)
 			oCluster.setModified(modified);
 
+		String modifiedIsoOffsetDateTime = (String)solrDocument.get("modifiedIsoOffsetDateTime_stored_string");
+		if(modifiedIsoOffsetDateTime != null)
+			oCluster.setModifiedIsoOffsetDateTime(modifiedIsoOffsetDateTime);
+
 		Boolean archived = (Boolean)solrDocument.get("archived_stored_boolean");
 		if(archived != null)
 			oCluster.setArchived(archived);
@@ -3147,7 +3320,7 @@ public abstract class ClusterGen<DEV> extends Object {
 
 		List<String> saves = (List<String>)solrDocument.get("saves_stored_strings");
 		if(saves != null)
-			oCluster.setSaves(saves);
+			oCluster.saves.addAll(saves);
 
 		String objectTitle = (String)solrDocument.get("objectTitle_stored_string");
 		if(objectTitle != null)
@@ -3192,6 +3365,8 @@ public abstract class ClusterGen<DEV> extends Object {
 				apiRequest.addVars("created");
 			if(!Objects.equals(modified, original.getModified()))
 				apiRequest.addVars("modified");
+			if(!Objects.equals(modifiedIsoOffsetDateTime, original.getModifiedIsoOffsetDateTime()))
+				apiRequest.addVars("modifiedIsoOffsetDateTime");
 			if(!Objects.equals(archived, original.getArchived()))
 				apiRequest.addVars("archived");
 			if(!Objects.equals(deleted, original.getDeleted()))
@@ -3230,7 +3405,7 @@ public abstract class ClusterGen<DEV> extends Object {
 	//////////////
 
 	@Override public int hashCode() {
-		return Objects.hash(pk, inheritPk, id, created, modified, archived, deleted, classCanonicalName, classSimpleName, classCanonicalNames, sessionId, userId, userKey, saves, objectTitle, objectId, objectSuggest, objectText, pageUrlId, pageUrlPk);
+		return Objects.hash(pk, inheritPk, id, created, modified, modifiedIsoOffsetDateTime, archived, deleted, classCanonicalName, classSimpleName, classCanonicalNames, sessionId, userId, userKey, saves, objectTitle, objectId, objectSuggest, objectText, pageUrlId, pageUrlPk);
 	}
 
 	////////////
@@ -3248,6 +3423,7 @@ public abstract class ClusterGen<DEV> extends Object {
 				&& Objects.equals( id, that.id )
 				&& Objects.equals( created, that.created )
 				&& Objects.equals( modified, that.modified )
+				&& Objects.equals( modifiedIsoOffsetDateTime, that.modifiedIsoOffsetDateTime )
 				&& Objects.equals( archived, that.archived )
 				&& Objects.equals( deleted, that.deleted )
 				&& Objects.equals( classCanonicalName, that.classCanonicalName )
@@ -3277,6 +3453,7 @@ public abstract class ClusterGen<DEV> extends Object {
 		sb.append( ", id: \"" ).append(id).append( "\"" );
 		sb.append( ", created: " ).append(created);
 		sb.append( ", modified: " ).append(modified);
+		sb.append( ", modifiedIsoOffsetDateTime: \"" ).append(modifiedIsoOffsetDateTime).append( "\"" );
 		sb.append( ", archived: " ).append(archived);
 		sb.append( ", deleted: " ).append(deleted);
 		sb.append( ", classCanonicalName: \"" ).append(classCanonicalName).append( "\"" );

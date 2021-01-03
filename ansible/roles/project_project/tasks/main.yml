@@ -1,5 +1,3 @@
-- set_fact: 
-    PROJECT_SRC: "{{ playbook_dir | dirname }}"
 - stat: 
     path: /usr/bin/git
   register: GIT_EXISTS

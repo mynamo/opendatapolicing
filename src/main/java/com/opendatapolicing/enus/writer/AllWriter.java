@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.text.WordUtils;
-
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.opendatapolicing.enus.wrap.Wrap;
 

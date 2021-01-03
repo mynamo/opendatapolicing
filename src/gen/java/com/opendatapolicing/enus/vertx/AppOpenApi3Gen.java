@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.logging.Logger;
+import java.math.RoundingMode;
 import com.opendatapolicing.enus.wrap.Wrap;
 import java.math.MathContext;
 import com.opendatapolicing.enus.writer.AllWriter;
@@ -31,7 +32,7 @@ import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 /**	
- * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.vertx.AppOpenApi3&fq=classeEtendGen_indexed_boolean:true">Trouver la classe  dans Solr</a>
+ * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.opendatapolicing.enus.vertx.AppOpenApi3&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
 public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
@@ -123,6 +124,62 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 		switch(var) {
 			default:
 				return super.attributeAppSwagger2(var, val);
+		}
+	}
+
+	///////////////
+	// staticSet //
+	///////////////
+
+	public static Object staticSetForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSetAppOpenApi3(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSetAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+			default:
+				return AppSwagger2.staticSetAppSwagger2(entityVar,  siteRequest_, o);
+		}
+	}
+
+	////////////////
+	// staticSolr //
+	////////////////
+
+	public static Object staticSolrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrAppOpenApi3(entityVar,  siteRequest_, o);
+	}
+	public static Object staticSolrAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+			default:
+				return AppSwagger2.staticSolrAppSwagger2(entityVar,  siteRequest_, o);
+		}
+	}
+
+	///////////////////
+	// staticSolrStr //
+	///////////////////
+
+	public static String staticSolrStrForClass(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		return staticSolrStrAppOpenApi3(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrStrAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, Object o) {
+		switch(entityVar) {
+			default:
+				return AppSwagger2.staticSolrStrAppSwagger2(entityVar,  siteRequest_, o);
+		}
+	}
+
+	//////////////////
+	// staticSolrFq //
+	//////////////////
+
+	public static String staticSolrFqForClass(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		return staticSolrFqAppOpenApi3(entityVar,  siteRequest_, o);
+	}
+	public static String staticSolrFqAppOpenApi3(String entityVar, SiteRequestEnUS siteRequest_, String o) {
+		switch(entityVar) {
+			default:
+				return AppSwagger2.staticSolrFqAppSwagger2(entityVar,  siteRequest_, o);
 		}
 	}
 

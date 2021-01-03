@@ -5,9 +5,20 @@
     PROJECT_NAME: opendatapolicing
     GITHUB_ORG: "{{ PROJECT_NAME }}"
     PROJECT_REPO: "git@github.com:computate/{{ PROJECT_NAME }}.git"
-  roles:
-    - project_postgres
-    - project_zookeeper
-    - project_solr
-    - opendatapolicing
+    PROJECT_SRC: "{{ playbook_dir | dirname }}"
+    PROJECT_JAVA_PACKAGE: com.opendatapolicing.enus
+  tasks: 
+#    - include_role:
+#        name: computate.computate_postgres
+#    - include_role:
+#        name: computate.computate_zookeeper
+#    - include_role:
+#        name: computate.computate_solr
+    - include_role:
+        name: computate.computate_project
+      vars: 
+        PROJECT_SERVICES: 
+          - PROJECT_NAME: "{{ PROJECT_NAME }}"
+            PROJECT_SRC: "{{ PROJECT_SRC }}"
+            PROJECT_JAVA_PACKAGE: "{{ PROJECT_JAVA_PACKAGE }}"
 

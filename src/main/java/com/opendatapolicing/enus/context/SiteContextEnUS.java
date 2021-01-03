@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.opendatapolicing.enus.config.SiteConfig;
 import com.opendatapolicing.enus.wrap.Wrap;
 

@@ -1,4 +1,4 @@
-package com.opendatapolicing.enus.config;    
+package com.opendatapolicing.enus.config;
 
 import java.io.File;
 import java.io.Serializable;
@@ -12,7 +12,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-
 import com.opendatapolicing.enus.wrap.Wrap;
 
 
@@ -140,6 +139,18 @@ public class SiteConfig extends SiteConfigGen<Object> implements Serializable {
 			o = NumberUtils.toInt(System.getenv(c.var));
 		else
 			o = config.getInt(prefixEscaped + c.var, 8080);
+		c.o(o);
+	}
+
+	/**
+	 * The number of instances of the Vertx verticle to deploy. 
+	 **/
+	protected void _siteInstances(Wrap<Integer> c) {
+		Integer o;
+		if(config == null)
+			o = NumberUtils.toInt(System.getenv(c.var));
+		else
+			o = config.getInt(prefixEscaped + c.var, 1);
 		c.o(o);
 	}
 

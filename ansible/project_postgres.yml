@@ -1,0 +1,5 @@
+---
+- name: Install a local PostgreSQL server
+  hosts: localhost
+  roles:
+    - computate.computate_postgres

@@ -18,12 +18,11 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.opendatapolicing.enus.user.SiteUser;
 import com.opendatapolicing.enus.wrap.Wrap;
 
-/**
+/** 
  * Keyword: classSimpleNameSearchList
  */
 public class SearchList<DEV> extends SearchListGen<DEV> {
@@ -32,6 +31,10 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 */
 	protected void _siteRequest_(Wrap<SiteRequestEnUS> c) {
 	}
 
@@ -156,6 +159,10 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 
 	public boolean getTerms() {
 		return solrQuery.getTerms();
+	}
+
+	public SolrQuery addField(String field) {
+		return solrQuery.addField(field);
 	}
 
 	public SolrQuery addTermsField(String field) {
@@ -677,7 +684,6 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 		} catch (UnsupportedEncodingException e) {
 			ExceptionUtils.rethrow(e);
 		}
-		sb.append(list.toString());
 		Long numFound = Optional.ofNullable(getQueryResponse()).map(QueryResponse::getResults).map(SolrDocumentList::getNumFound).orElse(null);
 		if(numFound != null)
 			sb.append("numFound: ").append(numFound).append("\n");

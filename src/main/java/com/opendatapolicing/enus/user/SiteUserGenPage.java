@@ -241,6 +241,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 			o.htmCustomerProfileId("Search");
 		} g("div");
 		{ e("div").a("class", "w3-cell-row ").f();
+			o.htmInheritPk("Search");
 			o.htmUserId("Search");
 			o.htmUserKey("Search");
 			o.htmObjectTitle("Search");

@@ -1485,6 +1485,13 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		siteUserWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
+	public void htmlBodySiteUser(SiteUser o) {
+	}
+	public void htmlBodySiteUser() {
+		siteUser.htmlAvant();
+		htmlBodySiteUser(siteUser);
+		siteUser.htmlApres();
+	}
 
 	//////////////
 	// xmlStack //

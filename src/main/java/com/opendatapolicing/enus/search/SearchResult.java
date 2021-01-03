@@ -1,7 +1,6 @@
 package com.opendatapolicing.enus.search;
 
 import org.apache.solr.common.SolrDocument;
-
 import com.opendatapolicing.enus.request.SiteRequestEnUS;
 import com.opendatapolicing.enus.wrap.Wrap;
 
