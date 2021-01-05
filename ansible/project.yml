@@ -8,12 +8,12 @@
     PROJECT_SRC: "{{ playbook_dir | dirname }}"
     PROJECT_JAVA_PACKAGE: com.opendatapolicing.enus
   tasks: 
-#    - include_role:
-#        name: computate.computate_postgres
-#    - include_role:
-#        name: computate.computate_zookeeper
-#    - include_role:
-#        name: computate.computate_solr
+    - include_role:
+        name: computate.computate_postgres
+    - include_role:
+        name: computate.computate_zookeeper
+    - include_role:
+        name: computate.computate_solr
     - include_role:
         name: computate.computate_project
       vars: 
